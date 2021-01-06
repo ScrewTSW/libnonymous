@@ -3,11 +3,10 @@ package com.davenonymous.libnonymous.utils;
 import com.davenonymous.libnonymous.Libnonymous;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Direction;
@@ -15,12 +14,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -29,7 +26,7 @@ public class RotationTools {
     private static ResourceLocation arrowImage;
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderArrowOnGround(Vec3d hitPosition, BlockPos drawPosition, float partialTicks, MatrixStack matrix) {
+    public static void renderArrowOnGround(Vector3d hitPosition, BlockPos drawPosition, float partialTicks, MatrixStack matrix) {
         Direction facing = RotationTools.getFacingByTriangle(hitPosition);
 
         RotationTools.TextureRotationList rotList = new RotationTools.TextureRotationList();
@@ -91,14 +88,14 @@ public class RotationTools {
             return null;
         }
 
-        Vec3d hitPosition = trace.getHitVec();
+        Vector3d hitPosition = trace.getHitVec();
 
-        hitPosition = hitPosition.subtract(new Vec3d(trace.getPos()));
+        hitPosition = hitPosition.subtract(new Vector3d(trace.getPos().getX(), trace.getPos().getY(), trace.getPos().getZ()));
         hitPosition = hitPosition.subtract(0.5d, 0.5d, 0.5d);
         return getFacingByTriangle(hitPosition);
     }
 
-    public static Direction getFacingByTriangle(Vec3d vec) {
+    public static Direction getFacingByTriangle(Vector3d vec) {
         if(vec.z > 0) {
             if(vec.x < 0) {
                 // Quadrant 1

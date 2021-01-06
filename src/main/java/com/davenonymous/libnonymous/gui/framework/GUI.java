@@ -4,16 +4,19 @@ import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.gui.framework.widgets.IValueProvider;
 import com.davenonymous.libnonymous.gui.framework.widgets.Widget;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.ITextProperties;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GUI extends WidgetPanel {
     public static ResourceLocation tabIcons = new ResourceLocation(Libnonymous.MODID, "textures/gui/tabicons.png");
@@ -45,11 +48,11 @@ public class GUI extends WidgetPanel {
         return valueMap.get(id).getValue();
     }
 
-    public void drawGUI(Screen screen) {
+    public void drawGUI(Screen screen, MatrixStack matrixStack) {
         this.setX((screen.width - this.width)/2);
         this.setY((screen.height - this.height)/2);
 
-        this.shiftAndDraw(screen);
+        this.shiftAndDraw(screen, matrixStack);
     }
 
     @Override
@@ -60,9 +63,9 @@ public class GUI extends WidgetPanel {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         drawWindow(screen);
-        super.draw(screen);
+        super.draw(screen, matrixStack);
     }
 
     protected void drawWindow(Screen screen) {
@@ -109,13 +112,13 @@ public class GUI extends WidgetPanel {
         GUIHelper.drawStretchedTexture(xOffset+4, 4, width - 8, this.height - 8, texOffsetX + 4, texOffsetY+4, 64, 64);
     }
 
-    public void drawTooltips(Screen screen, int mouseX, int mouseY) {
+    public void drawTooltips(MatrixStack matrixStack, Screen screen, int mouseX, int mouseY) {
         Widget hoveredWidget = getHoveredWidget(mouseX, mouseY);
         FontRenderer font = screen.getMinecraft().fontRenderer;
 
         if(hoveredWidget != null && hoveredWidget.getTooltip() != null) {
             if(hoveredWidget.getTooltip().size() > 0) {
-                GuiUtils.drawHoveringText(hoveredWidget.getTooltipAsString(), mouseX, mouseY, width, height, 180, font);
+                GuiUtils.drawHoveringText(matrixStack, Collections.singletonList(new StringTextComponent(hoveredWidget.getTooltipAsString().toString())), mouseX, mouseY, width, height, 180, font);
             }/* else {
                 List<String> tooltips = new ArrayList<>();
                 tooltips.add(hoveredWidget.toString());

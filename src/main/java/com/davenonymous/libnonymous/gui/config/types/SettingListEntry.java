@@ -47,7 +47,7 @@ public abstract class SettingListEntry extends WidgetListEntry {
             comment = "";
         }
 
-        String trimmedComment = Minecraft.getInstance().fontRenderer.trimStringToWidth(comment, availableSpaceForText-13);
+        String trimmedComment = Minecraft.getInstance().fontRenderer.trimStringToWidth(new StringTextComponent(comment), availableSpaceForText-13).toString();
         if(trimmedComment.length() < comment.length()) {
             trimmedComment += "...";
         }

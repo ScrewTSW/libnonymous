@@ -18,6 +18,6 @@ public class PacketReloadConfigs extends BasePacket {
 
     @Override
     public void doWork(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().getSender().server.reload();
+//        ctx.get().getSender().server.reload();
     }
 }

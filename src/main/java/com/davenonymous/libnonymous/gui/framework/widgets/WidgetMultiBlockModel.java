@@ -27,7 +27,7 @@ public class WidgetMultiBlockModel extends Widget {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         float angle = RenderTickCounter.renderTicks * 45.0f / 128.0f;
 
         RenderSystem.pushMatrix();
@@ -94,7 +94,7 @@ public class WidgetMultiBlockModel extends Widget {
         IRenderTypeBuffer buffer = IRenderTypeBuffer.getImpl(builder);
 
         // TODO: Do not render with players position
-        MultiblockBlockModelRenderer.renderModel(this.model, new MatrixStack(), buffer, 15728880,  OverlayTexture.DEFAULT_LIGHT, Libnonymous.proxy.getClientWorld(), Libnonymous.proxy.getClientPlayer().getPosition());
+        MultiblockBlockModelRenderer.renderModel(this.model, new MatrixStack(), buffer, 15728880,  OverlayTexture.NO_OVERLAY, Libnonymous.proxy.getClientWorld(), Libnonymous.proxy.getClientPlayer().getPosition());
 
         textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();

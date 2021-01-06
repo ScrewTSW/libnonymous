@@ -1,6 +1,7 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
 import com.davenonymous.libnonymous.gui.framework.SmartNumberFormatter;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.fml.client.gui.GuiUtils;
@@ -84,20 +85,20 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         int x = 0;
         int y = 0;
         int width = this.width;
         int height = this.height;
 
-        GuiUtils.drawGradientRect(0, x, y, x+width, y+height, borderColor, borderColor);
-        GuiUtils.drawGradientRect(0, x+1, y+1, x+width-1, y+height-1, backgroundColor, backgroundColor );
+        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, x, y, x+width, y+height, borderColor, borderColor);
+        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, x+1, y+1, x+width-1, y+height-1, backgroundColor, backgroundColor );
 
         double progress = (getValue() - getRangeMin()) / (getRangeMax() - getRangeMin());
         progress = Math.min(Math.max(progress, 0.0d), 1.0d);
         int progressWidth = (int) ((Math.ceil((double)width-2) * progress));
 
-        GuiUtils.drawGradientRect(0, x+1, y+1, x+1+progressWidth, y+height-1, foregroundColor, foregroundColor);
+        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, x+1, y+1, x+1+progressWidth, y+height-1, foregroundColor, foregroundColor);
 
         if(displayMode != EnumDisplayMode.NOTHING && displayMode != EnumDisplayMode.CUSTOM) {
             FontRenderer fr = screen.getMinecraft().fontRenderer;
@@ -112,7 +113,7 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
             }
 
             int xPos = x + 1 + (width - fr.getStringWidth(content)) / 2;
-            fr.drawString(content, xPos, y+2, textColor);
+            fr.drawString(matrixStack, content, xPos, y+2, textColor);
         }
 
     }

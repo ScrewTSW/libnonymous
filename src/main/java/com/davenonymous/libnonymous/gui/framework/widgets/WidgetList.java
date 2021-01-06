@@ -9,8 +9,10 @@ import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 
 import com.davenonymous.libnonymous.utils.Logz;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
 
@@ -45,7 +47,7 @@ public class WidgetList extends WidgetPanel {
     public Widget getScrollUpButton(int color) {
         WidgetTextBox box = new WidgetTextBox("<") {
             @Override
-            public void draw(Screen screen) {
+            public void draw(Screen screen, MatrixStack matrixStack) {
                 if(lineOffset == 0) {
                     return;
                 }
@@ -53,7 +55,7 @@ public class WidgetList extends WidgetPanel {
                 RenderSystem.pushMatrix();
                 RenderSystem.translatef(7.0f, 0.0f, 0.0f);
                 RenderSystem.rotatef(90.0f, 0.0f, 0.0f, 1.0f);
-                super.draw(screen);
+                super.draw(screen, matrixStack);
                 RenderSystem.popMatrix();
             }
         };
@@ -69,7 +71,7 @@ public class WidgetList extends WidgetPanel {
     public Widget getScrollDownButton(int color) {
         WidgetTextBox box = new WidgetTextBox(">") {
             @Override
-            public void draw(Screen screen) {
+            public void draw(Screen screen, MatrixStack matrixStack) {
                 if(lastVisibleLine == getTotalLines()-1) {
                     return;
                 }
@@ -77,7 +79,7 @@ public class WidgetList extends WidgetPanel {
                 RenderSystem.pushMatrix();
                 RenderSystem.translatef(7.0f, 0.0f, 0.0f);
                 RenderSystem.rotatef(90.0f, 0.0f, 0.0f, 1.0f);
-                super.draw(screen);
+                super.draw(screen, matrixStack);
                 RenderSystem.popMatrix();
             }
         };
@@ -159,7 +161,7 @@ public class WidgetList extends WidgetPanel {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         int backgroundColor = 0xFF333333;
         int borderColor = 0xFF000000;
         int selectedBackgroundColor = 0xFF555555;
@@ -171,13 +173,13 @@ public class WidgetList extends WidgetPanel {
         int scrollbarWidth = drawScrollbar ? 8 : 0;
 
         int listWidth = width-scrollbarWidth;
-        GuiUtils.drawGradientRect(0, 0, 0, listWidth, height, borderColor, borderColor);
-        GuiUtils.drawGradientRect(0, 1, 1, listWidth-1, height-1, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, 0, 0, listWidth, height, borderColor, borderColor);
+        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, 1, 1, listWidth-1, height-1, backgroundColor, backgroundColor);
 
         // Draw scrollbars
         if(drawScrollbar) {
             int scrollBarX = listWidth + 1;
-            GuiUtils.drawGradientRect(0, scrollBarX, 0, listWidth + scrollbarWidth, height, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, scrollBarX, 0, listWidth + scrollbarWidth, height, backgroundColor, backgroundColor);
 
             int linesBefore = lineOffset;
             int linesAfter = getTotalLines() - lastVisibleLine - 1;
@@ -193,7 +195,7 @@ public class WidgetList extends WidgetPanel {
             if(topOffset == 0) {
                 topOffset = 1;
             }
-            GuiUtils.drawGradientRect(0, scrollBarX+1, topOffset, listWidth + scrollbarWidth -1, topOffset+paddleHeight, scrollColor, scrollColor);
+            GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, scrollBarX+1, topOffset, listWidth + scrollbarWidth -1, topOffset+paddleHeight, scrollColor, scrollColor);
         }
 
         //Logz.info("Rendering lines %d to %d", lineOffset, lastVisibleLine);
@@ -208,11 +210,11 @@ public class WidgetList extends WidgetPanel {
 
             Widget selectedWidget = this.children.get(selected);
 
-            GuiUtils.drawGradientRect(0, 1, yOffset+1, listWidth-1, yOffset+1+selectedWidget.height-1, selectedBackgroundColor, selectedBackgroundColor);
+            GuiUtils.drawGradientRect(Matrix4f.makeTranslate(0,0,0), 0, 1, yOffset+1, listWidth-1, yOffset+1+selectedWidget.height-1, selectedBackgroundColor, selectedBackgroundColor);
         }
 
 
-        super.draw(screen);
+        super.draw(screen, matrixStack);
     }
 
     public <T extends Widget & ISelectable> void addListEntry(T widget) {

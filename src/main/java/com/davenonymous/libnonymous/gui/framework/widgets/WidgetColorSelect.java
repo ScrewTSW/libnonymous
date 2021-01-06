@@ -4,6 +4,7 @@ import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.gui.framework.event.MouseEnterEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseExitEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
@@ -28,7 +29,7 @@ public class WidgetColorSelect extends WidgetWithChoiceValue<Color> {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         screen.getMinecraft().getTextureManager().bindTexture(BUTTON_TEXTURES);
 
         float[] colors = this.getValue().getRGBColorComponents(null);

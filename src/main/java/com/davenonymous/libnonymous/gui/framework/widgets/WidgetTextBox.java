@@ -1,6 +1,7 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
 import org.lwjgl.opengl.GL11;
@@ -35,7 +36,7 @@ public class WidgetTextBox extends Widget {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         if(text == null) {
             return;
         }
@@ -55,7 +56,7 @@ public class WidgetTextBox extends Widget {
         }
         GL11.glScissor(getActualX() * scale, bottomOffset+2, width*scale, heightTmp);
 
-        screen.getMinecraft().fontRenderer.drawSplitString(text, 0, 0, width, textColor);
+        screen.getMinecraft().fontRenderer.drawString(matrixStack, text, 0, 0, textColor);
 
         RenderSystem.disableBlend();
 

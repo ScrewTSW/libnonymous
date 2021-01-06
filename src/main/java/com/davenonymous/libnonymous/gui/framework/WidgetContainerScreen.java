@@ -1,7 +1,17 @@
 package com.davenonymous.libnonymous.gui.framework;
 
 
-import com.davenonymous.libnonymous.gui.framework.event.*;
+import com.davenonymous.libnonymous.gui.framework.event.CharTypedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.GuiDataUpdatedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.KeyPressedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.KeyReleasedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseMoveEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseReleasedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseScrollEvent;
+import com.davenonymous.libnonymous.gui.framework.event.UpdateScreenEvent;
+import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -95,7 +105,7 @@ public abstract class WidgetContainerScreen<T extends WidgetContainer> extends C
     */
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if(dataUpdated) {
             dataUpdated = false;
             gui.fireEvent(new GuiDataUpdatedEvent());
@@ -108,24 +118,24 @@ public abstract class WidgetContainerScreen<T extends WidgetContainer> extends C
             previousMouseY = mouseY;
         }
 
-        super.render(mouseX, mouseY, partialTicks);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(matrixStack, mouseX, mouseY);
 
         RenderSystem.pushMatrix();
         RenderSystem.translatef(-guiLeft, -guiTop+18, 0.0f);
-        gui.drawTooltips(this, mouseX, mouseY);
-        renderHoveredToolTip(mouseX, mouseY);
+        gui.drawTooltips(matrixStack, this, mouseX, mouseY);
+        renderHoveredTooltip(matrixStack, mouseX, mouseY);
         RenderSystem.popMatrix();
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        this.renderBackground();
-        gui.drawGUI(this);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        this.renderBackground(matrixStack);
+        gui.drawGUI(this, matrixStack);
 
         if(this.container != null && this.container.inventorySlots != null) {
             for(Slot slot : this.container.inventorySlots) {

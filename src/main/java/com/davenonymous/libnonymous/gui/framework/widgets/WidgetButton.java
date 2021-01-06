@@ -6,9 +6,11 @@ import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseEnterEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseExitEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -60,7 +62,7 @@ public class WidgetButton extends Widget {
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw(Screen screen, MatrixStack matrixStack) {
         //Logz.info("Width: %d, height: %d", width, height);
 
         RenderSystem.pushMatrix();
@@ -118,7 +120,7 @@ public class WidgetButton extends Widget {
 
         FontRenderer fontrenderer = screen.getMinecraft().fontRenderer;
         RenderSystem.translatef(0.0f, 0.0f, 10.0f);
-        drawButtonContent(screen, fontrenderer);
+        drawButtonContent(matrixStack, screen, fontrenderer);
         RenderSystem.translatef(0.0f, 0.0f, -10.0f);
 
         if(!enabled) {
@@ -130,13 +132,13 @@ public class WidgetButton extends Widget {
         RenderSystem.popMatrix();
     }
 
-    protected void drawButtonContent(Screen screen, FontRenderer renderer) {
-        drawString(screen, renderer);
+    protected void drawButtonContent(MatrixStack matrixStack, Screen screen, FontRenderer renderer) {
+        drawString(matrixStack, screen, renderer);
     }
 
-    protected void drawString(Screen screen, FontRenderer renderer) {
+    protected void drawString(MatrixStack matrixStack, Screen screen, FontRenderer renderer) {
         int color = 0xFFFFFF;
-        screen.drawCenteredString(renderer, unlocalizedLabel, width / 2, (height - 8) / 2, color);
+        AbstractGui.drawCenteredString(matrixStack, renderer, unlocalizedLabel, width / 2, (height - 8) / 2, color);
     }
 
     /**
