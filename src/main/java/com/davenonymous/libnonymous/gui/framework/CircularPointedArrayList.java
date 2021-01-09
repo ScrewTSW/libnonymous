@@ -3,6 +3,8 @@ package com.davenonymous.libnonymous.gui.framework;
 import java.util.ArrayList;
 
 public class CircularPointedArrayList<E> extends ArrayList<E> {
+
+    private static final long serialVersionUID = 1L;
     int pointer = 0;
     public boolean wrap = true;
 

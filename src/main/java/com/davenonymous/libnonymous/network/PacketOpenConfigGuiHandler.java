@@ -20,7 +20,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class PacketOpenConfigGuiHandler implements Consumer<PacketOpenConfigGui> {
+    
     private static Field FIELD_MODCONTAINER_CONFIGS;
+    private static final Minecraft minecraft = Minecraft.getInstance();
 
     static {
         try {
@@ -50,7 +52,7 @@ public class PacketOpenConfigGuiHandler implements Consumer<PacketOpenConfigGui>
                 .map(m -> m.getSpec())
                 .collect(Collectors.toList());
 
-        Minecraft.getInstance().displayGuiScreen(new WidgetGuiConfig(parent, configSpecs));
+        minecraft.displayGuiScreen(new WidgetGuiConfig(parent, configSpecs));
     }
 
     @Override
@@ -65,16 +67,16 @@ public class PacketOpenConfigGuiHandler implements Consumer<PacketOpenConfigGui>
                     Optional<BiFunction<Minecraft, Screen, Screen>> optExtPoint = modContainer.getCustomExtension(ExtensionPoint.CONFIGGUIFACTORY);
                     if(optExtPoint.isPresent()) {
                         BiFunction<Minecraft, Screen, Screen> configGuiFactory = optExtPoint.get();
-                        Screen screen = configGuiFactory.apply(Minecraft.getInstance(), null);
-                        Minecraft.getInstance().displayGuiScreen(screen);
+                        Screen screen = configGuiFactory.apply(minecraft, null);
+                        minecraft.displayGuiScreen(screen);
                     } else {
-                        Minecraft.getInstance().player.sendStatusMessage(new TranslationTextComponent("libnonymous.config.error.no_native_menu_exists"), false);
+                        minecraft.player.sendStatusMessage(new TranslationTextComponent("libnonymous.config.error.no_native_menu_exists"), false);
                     }
                 } else if(packet.mode == CommandOpenConfigGUI.Mode.BY_SPEC) {
                     EnumMap<ModConfig.Type, ModConfig> configs = getConfigsForModContainer(modContainer);
                     if(configs != null) {
                         List<ForgeConfigSpec> configSpecs = configs.values().stream().map(ModConfig::getSpec).collect(Collectors.toList());
-                        Minecraft.getInstance().displayGuiScreen(new WidgetGuiConfig(null, configSpecs));
+                        minecraft.displayGuiScreen(new WidgetGuiConfig(null, configSpecs));
                     }
                 }
             }

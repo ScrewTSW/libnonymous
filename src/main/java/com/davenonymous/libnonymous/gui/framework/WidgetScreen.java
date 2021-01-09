@@ -1,11 +1,17 @@
 package com.davenonymous.libnonymous.gui.framework;
 
-import com.davenonymous.libnonymous.gui.framework.event.*;
-import com.davenonymous.libnonymous.utils.Logz;
+import com.davenonymous.libnonymous.gui.framework.event.CharTypedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.KeyPressedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.KeyReleasedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseMoveEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseReleasedEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseScrollEvent;
+import com.davenonymous.libnonymous.gui.framework.event.UpdateScreenEvent;
+import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 

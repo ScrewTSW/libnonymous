@@ -1,9 +1,20 @@
 package com.davenonymous.libnonymous.gui.config;
 
-import com.davenonymous.libnonymous.gui.config.types.*;
+import com.davenonymous.libnonymous.gui.config.types.BooleanSettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.DoubleSettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.EnumSettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.IntegerSettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.ListSettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.SettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.StringSettingListEntry;
+import com.davenonymous.libnonymous.gui.config.types.UnknownSettingListEntry;
 import com.davenonymous.libnonymous.gui.framework.GUI;
 import com.davenonymous.libnonymous.gui.framework.WidgetScreen;
-import com.davenonymous.libnonymous.gui.framework.event.*;
+import com.davenonymous.libnonymous.gui.framework.event.ListSelectionEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseEnterEvent;
+import com.davenonymous.libnonymous.gui.framework.event.MouseExitEvent;
+import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.davenonymous.libnonymous.gui.framework.util.FontAwesomeIcons;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetFontAwesome;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetList;
@@ -17,7 +28,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.awt.*;
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,7 +44,7 @@ public class WidgetGuiConfig extends WidgetScreen {
     private static Field FIELD_SPEC_COMMENTS;
     private static Field FIELD_SPEC_CHILD_CONFIG;
     private static Method METHOD_SPEC_GET_NIO_PATH;
-    private static Class ACFC;
+    private static Class<?> ACFC;
 
     static {
         try {
@@ -235,7 +246,7 @@ public class WidgetGuiConfig extends WidgetScreen {
                         continue;
                     }
 
-                    ForgeConfigSpec.ConfigValue value = spec.getValues().get(Arrays.asList(category, optionKey));
+                    ForgeConfigSpec.ConfigValue<?> value = spec.getValues().get(Arrays.asList(category, optionKey));
                     SettingListEntry settingListEntry = getEntryForType(optionKey, comment, value, valueSpec.getDefault(), (columnWidths*2)-10);
                     if(settingListEntry == null) {
                         Logz.warn("Unknown config value type: {} -> {}", value.getClass(), value.get().getClass());
@@ -252,7 +263,7 @@ public class WidgetGuiConfig extends WidgetScreen {
         return gui;
     }
 
-    public SettingListEntry getEntryForType(String optionKey, String comment, ForgeConfigSpec.ConfigValue value, Object defaultValue, int entryWidth) {
+    public SettingListEntry getEntryForType(String optionKey, String comment, ForgeConfigSpec.ConfigValue<?> value, Object defaultValue, int entryWidth) {
         Object uncastVal = value.get();
         if(uncastVal instanceof Boolean) {
             return new BooleanSettingListEntry(optionKey, comment, value, defaultValue, entryWidth);

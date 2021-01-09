@@ -19,6 +19,8 @@ import net.minecraftforge.registries.IForgeRegistry;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class RegistryEvents {
 
+    private static final Minecraft minecraft = Minecraft.getInstance();
+
     @SubscribeEvent
     public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
     }
@@ -41,6 +43,6 @@ public class RegistryEvents {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onParticleFactoryRegistry(final ParticleFactoryRegisterEvent event) {
-        Minecraft.getInstance().particles.registerFactory(ModObjects.blockProjectionParticleType, new BlockProjectionParticleFactory());
+        minecraft.particles.registerFactory(ModObjects.blockProjectionParticleType, new BlockProjectionParticleFactory());
     }
 }

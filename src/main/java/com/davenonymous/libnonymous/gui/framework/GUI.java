@@ -6,24 +6,28 @@ import com.davenonymous.libnonymous.gui.framework.widgets.Widget;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.ITextProperties;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.client.gui.GuiUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GUI extends WidgetPanel {
+    
     public static ResourceLocation tabIcons = new ResourceLocation(Libnonymous.MODID, "textures/gui/tabicons.png");
     public static ResourceLocation defaultButtonTexture = new ResourceLocation(Libnonymous.MODID, "textures/gui/button_background.png");
 
     public boolean hasTabs = false;
-    private Map<ResourceLocation, IValueProvider> valueMap = new HashMap<>();
+    private Map<ResourceLocation, IValueProvider<?>> valueMap = new HashMap<>();
+    private static final Minecraft minecraft = Minecraft.getInstance();
 
     public GUI(int x, int y, int width, int height) {
         this.setX(x);
@@ -36,7 +40,7 @@ public class GUI extends WidgetPanel {
         this.findValueWidgets(this);
     }
 
-    public void registerValueWidget(ResourceLocation id, IValueProvider widget) {
+    public void registerValueWidget(ResourceLocation id, IValueProvider<?> widget) {
         this.valueMap.put(id, widget);
     }
 
@@ -72,7 +76,7 @@ public class GUI extends WidgetPanel {
         RenderHelper.disableStandardItemLighting();
 
         RenderSystem.color4f(1f, 1f, 1f, 1f);
-        screen.getMinecraft().textureManager.bindTexture(tabIcons);
+        minecraft.textureManager.bindTexture(tabIcons);
 
         int texOffsetY = 11;
         int texOffsetX = 64;
@@ -114,7 +118,7 @@ public class GUI extends WidgetPanel {
 
     public void drawTooltips(MatrixStack matrixStack, Screen screen, int mouseX, int mouseY) {
         Widget hoveredWidget = getHoveredWidget(mouseX, mouseY);
-        FontRenderer font = screen.getMinecraft().fontRenderer;
+        FontRenderer font = minecraft.fontRenderer;
 
         if(hoveredWidget != null && hoveredWidget.getTooltip() != null) {
             if(hoveredWidget.getTooltip().size() > 0) {
@@ -142,7 +146,7 @@ public class GUI extends WidgetPanel {
         }
         */
 
-        screen.getMinecraft().textureManager.bindTexture(tabIcons);
+        minecraft.textureManager.bindTexture(tabIcons);
 
         float offsetX = guiLeft-1;
         float offsetY = guiTop-1;

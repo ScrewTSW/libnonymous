@@ -2,7 +2,7 @@ package com.davenonymous.libnonymous.gui.framework;
 
 import com.davenonymous.libnonymous.utils.Logz;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class ColorHelper {
     public static Color COLOR_ENABLED = new Color(50, 125, 50);

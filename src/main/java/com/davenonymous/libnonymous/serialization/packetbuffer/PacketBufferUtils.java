@@ -32,7 +32,7 @@ public class PacketBufferUtils {
                     continue;
                 }
 
-                Sync syncAnnotation = (Sync)annotation;
+                // Sync syncAnnotation = (Sync)annotation;
                 actionList.add(new PacketBufferFieldSerializationData(field));
                 field.setAccessible(true);
             }

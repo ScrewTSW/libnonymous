@@ -15,7 +15,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class Libnonymous {
     public static final String MODID = "libnonymous";
 
-    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyServer());
+    public static IProxy proxy = DistExecutor.unsafeRunForDist(() -> () -> new ProxyClient(), () -> () -> new ProxyServer());
     public static ModSetup setup = new ModSetup();
 
     public Libnonymous() {

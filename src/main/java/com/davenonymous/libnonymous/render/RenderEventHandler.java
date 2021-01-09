@@ -16,14 +16,16 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class RenderEventHandler {
 
+    private static final Minecraft minecraft = Minecraft.getInstance();
+
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void handleRendererForBaseObjects(RenderWorldLastEvent event) {
-        if(!Minecraft.isGuiEnabled() || Minecraft.getInstance().player == null) {
+        if(!Minecraft.isGuiEnabled() || minecraft.player == null) {
             return;
         }
 
-        PlayerEntity player = Minecraft.getInstance().player;
+        PlayerEntity player = minecraft.player;
         ItemStack mainHand = player.getHeldItem(Hand.MAIN_HAND);
         ItemStack offHand = player.getHeldItem(Hand.OFF_HAND);
 

@@ -1,6 +1,5 @@
 package com.davenonymous.libnonymous.serialization.nbt;
 
-import com.davenonymous.libnonymous.serialization.nbt.NBTFieldHandlers;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.Field;

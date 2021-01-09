@@ -7,7 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
@@ -18,7 +17,7 @@ import net.minecraft.world.lighting.WorldLightManager;
 
 import javax.annotation.Nullable;
 
-public class MultiBlockModelWorldReader implements IBlockReader, BiomeManager.IBiomeReader, IBlockDisplayReader {
+public class MultiBlockModelWorldReader implements BiomeManager.IBiomeReader, IBlockDisplayReader {
     private MultiblockBlockModel model;
 
     private IWorldReader blockWorld;

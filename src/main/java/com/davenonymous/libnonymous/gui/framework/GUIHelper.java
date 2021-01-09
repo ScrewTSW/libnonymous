@@ -1,9 +1,10 @@
 package com.davenonymous.libnonymous.gui.framework;
 
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 
@@ -17,8 +18,11 @@ import net.minecraft.util.text.StringTextComponent;
 import org.lwjgl.opengl.GL11;
 
 public class GUIHelper {
+    
+    private static final Minecraft minecraft = Minecraft.getInstance();
+    
     public static void drawSplitStringCentered(MatrixStack matrixStack, String str, Screen screen, int x, int y, int width, int color) {
-        FontRenderer renderer = screen.getMinecraft().fontRenderer;
+        FontRenderer renderer = minecraft.fontRenderer;
         int yOffset = 0;
         for(IReorderingProcessor row : renderer.trimStringToWidth(new StringTextComponent(str), width)) {
             AbstractGui.drawCenteredString(matrixStack, renderer, row.toString(), x + width/2, y + yOffset, color);

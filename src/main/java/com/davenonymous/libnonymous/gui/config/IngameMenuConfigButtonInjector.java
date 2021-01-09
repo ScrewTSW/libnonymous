@@ -1,7 +1,6 @@
 package com.davenonymous.libnonymous.gui.config;
 
 import com.davenonymous.libnonymous.network.PacketOpenConfigGuiHandler;
-import com.davenonymous.libnonymous.utils.Logz;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.OptionsScreen;
 import net.minecraft.client.gui.widget.Widget;
@@ -17,6 +16,9 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class IngameMenuConfigButtonInjector {
+    
+    private static final Minecraft minecraft = Minecraft.getInstance();
+    
     @SubscribeEvent
     public static void onInitGui(GuiScreenEvent.InitGuiEvent event) {
         if(!(event.getGui() instanceof OptionsScreen)) {
@@ -42,7 +44,7 @@ public class IngameMenuConfigButtonInjector {
         }
 
         public static void onPress(Button button) {
-            PacketOpenConfigGuiHandler.openConfigGuiForAll(Minecraft.getInstance().currentScreen);
+            PacketOpenConfigGuiHandler.openConfigGuiForAll(minecraft.currentScreen);
         }
     }
 }

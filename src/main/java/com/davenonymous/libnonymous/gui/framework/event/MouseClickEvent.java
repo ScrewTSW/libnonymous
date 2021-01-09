@@ -4,17 +4,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 
 public class MouseClickEvent implements IEvent {
+
     public int button;
     public double x;
     public double y;
     public ItemStack carriedStack = ItemStack.EMPTY;
+    private static final Minecraft minecraft = Minecraft.getInstance();
 
     public MouseClickEvent(double mouseX, double mouseY, int button) {
         this.x = mouseX;
         this.y = mouseY;
         this.button = button;
-        if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.inventory != null) {
-            this.carriedStack = Minecraft.getInstance().player.inventory.getItemStack().copy();
+        if(minecraft.player != null && minecraft.player.inventory != null) {
+            this.carriedStack = minecraft.player.inventory.getItemStack().copy();
         }
     }
 

@@ -16,7 +16,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.Arrays;
 
-
 public abstract class SettingListEntry extends WidgetListEntry {
     public static final FontAwesomeIcons SAVE_ICON = FontAwesomeIcons.REGULAR_Save;
 

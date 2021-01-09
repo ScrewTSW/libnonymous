@@ -1,6 +1,5 @@
 package com.davenonymous.libnonymous.base;
 
-import com.davenonymous.libnonymous.serialization.FieldUtils;
 import com.davenonymous.libnonymous.serialization.nbt.NBTFieldSerializationData;
 import com.davenonymous.libnonymous.serialization.Store;
 import com.davenonymous.libnonymous.serialization.nbt.NBTFieldUtils;
@@ -102,7 +101,7 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
 
     @Override
     public void tick() {
-        if (!this.getWorld().isRemote && !this.initialized) {
+        if (!getWorld().isRemote && !this.initialized) {
             initialize();
             this.initialized = true;
         }

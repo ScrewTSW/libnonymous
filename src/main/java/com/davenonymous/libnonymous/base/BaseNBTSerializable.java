@@ -1,6 +1,5 @@
 package com.davenonymous.libnonymous.base;
 
-
 import com.davenonymous.libnonymous.serialization.nbt.NBTFieldSerializationData;
 import com.davenonymous.libnonymous.serialization.nbt.NBTFieldUtils;
 import net.minecraft.nbt.CompoundNBT;

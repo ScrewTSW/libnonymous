@@ -1,6 +1,5 @@
 package com.davenonymous.libnonymous.gui.framework;
 
-
 import com.davenonymous.libnonymous.gui.framework.event.CharTypedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.GuiDataUpdatedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.KeyPressedEvent;
@@ -52,7 +51,7 @@ public abstract class WidgetContainerScreen<T extends WidgetContainer> extends C
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        Slot slot = this.getSlotUnderMouse();
+        // Slot slot = this.getSlotUnderMouse();
         //if(slot instanceof WidgetSlot) {
             if (gui.fireEvent(new MouseReleasedEvent(mouseX, mouseY, mouseButton)) == WidgetEventResult.CONTINUE_PROCESSING) {
                 return super.mouseReleased(mouseX, mouseY, mouseButton);

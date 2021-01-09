@@ -15,7 +15,9 @@ import java.util.Random;
 import java.util.Set;
 
 public class MultiblockBlockModelRenderer {
+    
     private static final Random rand = new Random();
+    private static final Minecraft minecraft = Minecraft.getInstance();
 
     public static void renderModel(MultiblockBlockModel model, MatrixStack matrix, IRenderTypeBuffer buffer, int light, int overlay) {
         MultiBlockModelWorldReader modelWorld = new MultiBlockModelWorldReader(model);
@@ -41,10 +43,10 @@ public class MultiblockBlockModelRenderer {
 
                 if(modelWorld.getContextWorld() != null && modelWorld.getContextPos() != null) {
                     // TODO: Hacks hack hacks. Clean this up, make ambient occlusion work, use proper world references
-                    AmbientOcclusionStatus before = Minecraft.getInstance().gameSettings.ambientOcclusionStatus;
-                    Minecraft.getInstance().gameSettings.ambientOcclusionStatus = AmbientOcclusionStatus.OFF;
+                    AmbientOcclusionStatus before = minecraft.gameSettings.ambientOcclusionStatus;
+                    minecraft.gameSettings.ambientOcclusionStatus = AmbientOcclusionStatus.OFF;
                     brd.renderModel(state, modelWorld.getContextPos(), modelWorld.getContextWorld(), matrix, buffer.getBuffer(RenderType.getCutout()), false, rand, EmptyModelData.INSTANCE);
-                    Minecraft.getInstance().gameSettings.ambientOcclusionStatus = before;
+                    minecraft.gameSettings.ambientOcclusionStatus = before;
                 } else {
                     brd.renderBlock(state, matrix, buffer, light, overlay, EmptyModelData.INSTANCE);
                 }

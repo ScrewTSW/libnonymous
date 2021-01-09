@@ -15,7 +15,13 @@ import net.minecraftforge.common.util.INBTSerializable;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.UUID;
 
 public class NBTFieldHandlers {
     private static final Map<Class<?>, Pair<NbtReader, NbtWriter>> nbtHandlers = new HashMap<>();
