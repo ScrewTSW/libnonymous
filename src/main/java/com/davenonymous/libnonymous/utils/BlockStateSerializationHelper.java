@@ -144,7 +144,19 @@ public class BlockStateSerializationHelper {
     }
 
     public static boolean isValidBlockState(JsonObject json) {
-        String blockName = json.get("block").getAsString();
+        if (json == null) {
+            return false;
+        }
+        if (!json.has("block")) {
+            return false;
+        }
+
+        JsonElement element = json.get("block");
+        if (element == null) {
+            return false;
+        }
+
+        String blockName = element.getAsString();
         if(blockName.equals("minecraft:air")) {
             return true;
         }

@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MultiBlockModelSerializer implements JsonDeserializer<MultiblockBlockModel> {
 
@@ -76,14 +77,27 @@ public class MultiBlockModelSerializer implements JsonDeserializer<MultiblockBlo
         }
 
         ResourceLocation treeType = new ResourceLocation(root.get("type").getAsString());
-
+        JsonObject refObject;
         if(hasUnknownBlocksInMap(root.getAsJsonObject("ref"))) {
-            //Logz.warn("Unknown blocks in multiblockmodel json");
-            return null;
+            Logz.warn("Unknown blocks in multiblockmodel json of "+root.getAsJsonPrimitive("type").getAsString());
+            refObject = new JsonObject();
+            Set<Map.Entry<String, JsonElement>> refEntries = root.getAsJsonObject("ref").entrySet();
+            Logz.info("Validating ref entries:"+refEntries.size());
+            for (Map.Entry<String, JsonElement> entry : refEntries) {
+                Logz.trace("Validating "+entry.getKey());
+                if (BlockStateSerializationHelper.isValidBlockState(entry.getValue().getAsJsonObject())){
+                    Logz.trace(entry.getKey()+" is a valid ref, adding to refObjects");
+                    refObject.add(entry.getKey(), entry.getValue());
+                } else {
+                    Logz.warn(entry.getKey()+" failed to validate, ignoring.");
+                }
+            }
+        } else {
+            refObject = root.getAsJsonObject("ref");
         }
 
         // Get the reference map
-        Map<String, BlockState> refMap = getReferenceMapV3(root.getAsJsonObject("ref"));
+        Map<String, BlockState> refMap = getReferenceMapV3(refObject);
 
         // And use it to build the actual block map
         Map<BlockPos, BlockState> blocks = new HashMap<>();
@@ -101,8 +115,8 @@ public class MultiBlockModelSerializer implements JsonDeserializer<MultiblockBlo
                     }
 
                     if(!refMap.containsKey(ref)) {
-                        Logz.warn("Shape-Entry is using an unknown block reference '%s'! Skipping shape!", ref);
-                        return null;
+                        Logz.warn(String.format("Shape-Entry is using an unknown block reference '%s'! Replacing with air block!", ref));
+                        continue;
                     }
 
                     blocks.put(new BlockPos(x, y, z), refMap.get(ref));
