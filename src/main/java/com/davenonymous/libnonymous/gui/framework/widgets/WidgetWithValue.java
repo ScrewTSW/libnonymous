@@ -1,7 +1,7 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
 import com.davenonymous.libnonymous.gui.framework.event.ValueChangedEvent;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class WidgetWithValue<T> extends Widget implements IValueProvider<T> {
     public ResourceLocation id;

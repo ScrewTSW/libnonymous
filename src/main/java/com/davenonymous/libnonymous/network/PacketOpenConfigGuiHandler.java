@@ -3,8 +3,8 @@ package com.davenonymous.libnonymous.network;
 import com.davenonymous.libnonymous.command.CommandOpenConfigGUI;
 import com.davenonymous.libnonymous.gui.config.WidgetGuiConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModContainer;
@@ -70,7 +70,7 @@ public class PacketOpenConfigGuiHandler implements Consumer<PacketOpenConfigGui>
                         Screen screen = configGuiFactory.apply(minecraft, null);
                         minecraft.setScreen(screen);
                     } else {
-                        minecraft.player.displayClientMessage(new TranslationTextComponent("libnonymous.config.error.no_native_menu_exists"), false);
+                        minecraft.player.displayClientMessage(new TranslatableComponent("libnonymous.config.error.no_native_menu_exists"), false);
                     }
                 } else if(packet.mode == CommandOpenConfigGUI.Mode.BY_SPEC) {
                     EnumMap<ModConfig.Type, ModConfig> configs = getConfigsForModContainer(modContainer);

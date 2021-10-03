@@ -1,8 +1,8 @@
 package com.davenonymous.libnonymous.network;
 
 import com.davenonymous.libnonymous.base.BasePacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -12,7 +12,7 @@ public class PacketReloadConfigs extends BasePacket {
         super();
     }
 
-    public PacketReloadConfigs(PacketBuffer buf) {
+    public PacketReloadConfigs(FriendlyByteBuf buf) {
         super(buf);
     }
 

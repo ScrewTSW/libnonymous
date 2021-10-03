@@ -2,13 +2,17 @@ package com.davenonymous.libnonymous.gui.framework.widgets;
 
 import com.davenonymous.libnonymous.gui.framework.GUI;
 import com.davenonymous.libnonymous.gui.framework.event.*;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Widget {
@@ -23,7 +27,7 @@ public class Widget {
     boolean hovered = false;
     Widget parent;
 
-    List<ITextComponent> tooltipLines = new ArrayList<>();
+    List<Component> tooltipLines = new ArrayList<>();
 
     Map<Class<? extends IEvent>, List<IWidgetListener>> eventListeners = new HashMap<>();
     List<IWidgetListener> anyEventListener = new ArrayList<>();
@@ -72,7 +76,7 @@ public class Widget {
         return getTooltip().stream().map(t -> t.plainCopy().toString()).collect(Collectors.toList());
     }
 
-    public List<ITextComponent> getTooltip() {
+    public List<Component> getTooltip() {
         if(tooltipLines == null) {
             return Collections.emptyList();
         }
@@ -80,27 +84,27 @@ public class Widget {
         return tooltipLines;
     }
 
-    public Widget setTooltipLines(List<ITextComponent> tooltipLines) {
+    public Widget setTooltipLines(List<Component> tooltipLines) {
         this.tooltipLines = tooltipLines;
         return this;
     }
 
-    public Widget setTooltipLines(ITextComponent ... tooltipLines) {
+    public Widget setTooltipLines(Component ... tooltipLines) {
         this.tooltipLines = new ArrayList<>();
-        for(ITextComponent line : tooltipLines) {
+        for(Component line : tooltipLines) {
             this.tooltipLines.add(line);
         }
         return this;
     }
 
-    public Widget addTooltipLine(ITextComponent ... tooltipLines) {
-        for(ITextComponent line : tooltipLines) {
+    public Widget addTooltipLine(Component ... tooltipLines) {
+        for(Component line : tooltipLines) {
             this.tooltipLines.add(line);
         }
         return this;
     }
 
-    public Widget addTooltipLine(List<ITextComponent> strings) {
+    public Widget addTooltipLine(List<Component> strings) {
         this.tooltipLines.addAll(strings);
         return this;
     }
@@ -230,7 +234,7 @@ public class Widget {
      *
      * @param screen
      */
-    public void shiftAndDraw(Screen screen, MatrixStack matrixStack) {
+    public void shiftAndDraw(Screen screen, PoseStack matrixStack) {
         this.drawBeforeShift(screen);
         RenderSystem.pushMatrix();
         RenderSystem.translatef(this.x, this.y, 0);
@@ -257,7 +261,7 @@ public class Widget {
      *
      * @param screen
      */
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         //Logz.debug("Drawing widget: %s, x=%d, y=%d, width=%d, height=%d", this, layoutResult.getX(), layoutResult.getY(), layoutResult.getWidth(), layoutResult.getHeight());
     }
 

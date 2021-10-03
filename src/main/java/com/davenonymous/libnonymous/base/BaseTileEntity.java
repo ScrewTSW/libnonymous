@@ -3,23 +3,23 @@ package com.davenonymous.libnonymous.base;
 import com.davenonymous.libnonymous.serialization.nbt.NBTFieldSerializationData;
 import com.davenonymous.libnonymous.serialization.Store;
 import com.davenonymous.libnonymous.serialization.nbt.NBTFieldUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
+public class BaseTileEntity extends BlockEntity {
     private boolean initialized = false;
 
     @Store(storeWithItem = true, sendInUpdatePackage = true)
@@ -33,8 +33,8 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
 
     private List<NBTFieldSerializationData> NBTActions;
 
-    public BaseTileEntity(TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
+    public BaseTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos blockPosIn, BlockState blockStateIn) {
+        super(tileEntityTypeIn, blockPosIn, blockStateIn);
 
         this.NBTActions = NBTFieldUtils.initSerializableStoreFields(this.getClass());
     }
@@ -49,12 +49,12 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
     }
 
     public void saveToItem(ItemStack stack) {
-        CompoundNBT compound = createItemStackTagCompound();
+        CompoundTag compound = createItemStackTagCompound();
         stack.setTag(compound);
     }
 
-    protected CompoundNBT createItemStackTagCompound() {
-        return NBTFieldUtils.writeFieldsToNBT(NBTActions, this, new CompoundNBT(), data -> data.storeWithItem);
+    protected CompoundTag createItemStackTagCompound() {
+        return NBTFieldUtils.writeFieldsToNBT(NBTActions, this, new CompoundTag(), data -> data.storeWithItem);
     }
 
     public void notifyClients() {
@@ -63,17 +63,17 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(worldPosition, 1, getUpdateTag());
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
     }
 
     @Override
-    public CompoundNBT getUpdateTag() {
+    public CompoundTag getUpdateTag() {
         return NBTFieldUtils.writeFieldsToNBT(NBTActions, this, super.getUpdateTag(), data -> data.sendInUpdatePackage);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         NBTFieldUtils.readFieldsFromNBT(NBTActions, this, pkt.getTag(), data -> data.sendInUpdatePackage);
 
         /*
@@ -83,29 +83,29 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
         }
         */
     }
+//
+//    @Override
+//    public void load(BlockState state, CompoundTag nbt) {
+//        super.load(state, nbt);
+//
+//        NBTFieldUtils.readFieldsFromNBT(NBTActions, this, nbt, data -> true);
+//    }
 
     @Override
-    public void load(BlockState state, CompoundNBT nbt) {
-        super.load(state, nbt);
-
-        NBTFieldUtils.readFieldsFromNBT(NBTActions, this, nbt, data -> true);
-    }
-
-    @Override
-    public CompoundNBT save(CompoundNBT compound) {
+    public CompoundTag save(CompoundTag compound) {
         compound = super.save(compound);
         compound = NBTFieldUtils.writeFieldsToNBT(NBTActions, this, compound, data -> true);
 
         return compound;
     }
 
-    @Override
-    public void tick() {
-        if (!getLevel().isClientSide && !this.initialized) {
-            initialize();
-            this.initialized = true;
-        }
-    }
+//    @Override
+//    public void tick() {
+//        if (!getLevel().isClientSide && !this.initialized) {
+//            initialize();
+//            this.initialized = true;
+//        }
+//    }
 
     protected void initialize() {
     }
@@ -163,7 +163,7 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
     }
 
     public String getOwnerName() {
-        return level.getServer().getProfileCache().get(getOwner()).getName();
+        return level.getServer().getProfileCache().get(getOwner()).get().getName();
     }
 
     public boolean hasOwner() {
@@ -174,7 +174,7 @@ public class BaseTileEntity extends TileEntity implements ITickableTileEntity {
         this.owner = owner;
     }
 
-    public void setOwner(PlayerEntity player) {
+    public void setOwner(Player player) {
         if(player == null) {
             return;
         }

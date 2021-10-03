@@ -1,6 +1,6 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public abstract class WidgetPanelWithValue<T> extends WidgetPanel implements IValueProvider<T> {
     private ResourceLocation id;

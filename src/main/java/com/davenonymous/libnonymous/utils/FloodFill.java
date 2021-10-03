@@ -1,10 +1,10 @@
 package com.davenonymous.libnonymous.utils;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,12 +28,12 @@ public class FloodFill {
     private int MAX_SEARCH_DEPTH = 2048;
     private int MAX_BLOCKS = 4196;
 
-    private IWorldReader world;
+    private LevelReader world;
     private BlockPos startingPosition;
     private Map<BlockPos, BlockState> result;
     private boolean normalized = true;
 
-    public FloodFill(IWorldReader world, BlockPos startingPosition) {
+    public FloodFill(LevelReader world, BlockPos startingPosition) {
         this.world = world;
         this.startingPosition = startingPosition;
     }
@@ -72,7 +72,7 @@ public class FloodFill {
         return result;
     }
 
-    private void floodFill(IWorldReader world, BlockPos pos, int depth) {
+    private void floodFill(LevelReader world, BlockPos pos, int depth) {
         if(depth > MAX_SEARCH_DEPTH) {
             return;
         }

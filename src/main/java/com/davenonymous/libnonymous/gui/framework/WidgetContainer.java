@@ -1,13 +1,13 @@
 package com.davenonymous.libnonymous.gui.framework;
 
 import com.davenonymous.libnonymous.Libnonymous;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WidgetContainer extends Container {
+public class WidgetContainer extends AbstractContainerMenu {
     public static ResourceLocation SLOTGROUP_PLAYER = new ResourceLocation(Libnonymous.MODID, "player_slots");
 
     private IItemHandler playerInventory;
@@ -25,7 +25,7 @@ public class WidgetContainer extends Container {
     private Map<ResourceLocation, List<Integer>> slotGroupMap;
 
     private int nextSlotId = 0;
-    protected WidgetContainer(@Nullable ContainerType<?> type, int id, PlayerInventory inv) {
+    protected WidgetContainer(@Nullable MenuType<?> type, int id, Inventory inv) {
         super(type, id);
 
         this.playerInventory = new InvWrapper(inv);
@@ -165,7 +165,7 @@ public class WidgetContainer extends Container {
     // We are relying on the client to tell the server which slots are currently enabled,
     // see MessageEnabledSlots.
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot uncastSlot = this.slots.get(index);
         if(uncastSlot == null || !uncastSlot.hasItem() || !(uncastSlot instanceof WidgetSlot)) {
             return ItemStack.EMPTY;
@@ -197,7 +197,7 @@ public class WidgetContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return true;
     }
 }

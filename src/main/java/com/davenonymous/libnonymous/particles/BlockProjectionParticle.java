@@ -1,16 +1,16 @@
 package com.davenonymous.libnonymous.particles;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.particle.IParticleRenderType;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BlockParticleData;
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.BlockParticleOption;
 
 public class BlockProjectionParticle extends Particle {
-    BlockParticleData data;
+    BlockParticleOption data;
 
-    public BlockProjectionParticle(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, BlockParticleData data) {
+    public BlockProjectionParticle(ClientLevel worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, BlockParticleOption data) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
 
         this.xd = 0;
@@ -28,7 +28,7 @@ public class BlockProjectionParticle extends Particle {
     }
 
     @Override
-    public void render(IVertexBuilder buffer, ActiveRenderInfo renderInfo, float partialTicks) {
+    public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
         // TODO: Fix block particle rendering
         /*
         RenderSystem.pushMatrix();
@@ -65,8 +65,8 @@ public class BlockProjectionParticle extends Particle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.CUSTOM;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.CUSTOM;
     }
 
     /*

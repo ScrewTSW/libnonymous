@@ -1,7 +1,7 @@
 package com.davenonymous.libnonymous.gui.framework.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class MouseClickEvent implements IEvent {
 
@@ -15,8 +15,8 @@ public class MouseClickEvent implements IEvent {
         this.x = mouseX;
         this.y = mouseY;
         this.button = button;
-        if(minecraft.player != null && minecraft.player.inventory != null) {
-            this.carriedStack = minecraft.player.inventory.getCarried().copy();
+        if(minecraft.player != null && minecraft.player.inventoryMenu != null) {
+            this.carriedStack = minecraft.player.inventoryMenu.getCarried().copy();
         }
     }
 

@@ -3,14 +3,14 @@ package com.davenonymous.libnonymous.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.state.Property;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collection;
@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BlockStateSerializationHelper {
-    public static CompoundNBT serializeBlockStateToNBT(BlockState state) {
-        CompoundNBT result = new CompoundNBT();
+    public static CompoundTag serializeBlockStateToNBT(BlockState state) {
+        CompoundTag result = new CompoundTag();
         final Block block = state.getBlock();
         result.putString("block", block.getRegistryName().toString());
         if(state.getProperties().size() > 0) {
-            CompoundNBT propertiesTag = new CompoundNBT();
+            CompoundTag propertiesTag = new CompoundTag();
 
             for (final Property property : state.getProperties()) {
                 propertiesTag.putString(property.getName(), state.getValue(property).toString());
@@ -35,7 +35,7 @@ public class BlockStateSerializationHelper {
         return result;
     }
 
-    public static BlockState deserializeBlockState(CompoundNBT nbt) {
+    public static BlockState deserializeBlockState(CompoundTag nbt) {
         if(!nbt.contains("block")) {
             Logz.warn("NBT compound {} is not a blockstate", nbt);
             return null;
@@ -50,7 +50,7 @@ public class BlockStateSerializationHelper {
 
         BlockState state = block.defaultBlockState();
         if(nbt.contains("properties")) {
-            CompoundNBT propertiesTag = nbt.getCompound("properties");
+            CompoundTag propertiesTag = nbt.getCompound("properties");
             for(String propertyName : propertiesTag.getAllKeys()) {
                 final Property blockProperty = block.getStateDefinition().getProperty(propertyName);
                 if(blockProperty == null) {
@@ -77,7 +77,7 @@ public class BlockStateSerializationHelper {
         return state;
     }
 
-    public static void serializeBlockState(PacketBuffer buffer, BlockState state) {
+    public static void serializeBlockState(FriendlyByteBuf buffer, BlockState state) {
         buffer.writeResourceLocation(state.getBlock().getRegistryName());
 
         final Collection<Property<?>> properties = state.getProperties();
@@ -89,7 +89,7 @@ public class BlockStateSerializationHelper {
         }
     }
 
-    public static BlockState deserializeBlockState(PacketBuffer buffer) {
+    public static BlockState deserializeBlockState(FriendlyByteBuf buffer) {
         final ResourceLocation id = buffer.readResourceLocation();
         final Block block = ForgeRegistries.BLOCKS.getValue(id);
 
@@ -222,7 +222,7 @@ public class BlockStateSerializationHelper {
 
                         else {
 
-                            throw new JsonSyntaxException("Expected property value for " + property.getKey() + " to be primitive string. Got " + JSONUtils.getType(property.getValue()));
+                            throw new JsonSyntaxException("Expected property value for " + property.getKey() + " to be primitive string. Got " + GsonHelper.getType(property.getValue()));
                         }
                     }
 
@@ -235,7 +235,7 @@ public class BlockStateSerializationHelper {
 
             else {
 
-                throw new JsonSyntaxException("Expected properties to be an object. Got " + JSONUtils.getType(propertiesElement));
+                throw new JsonSyntaxException("Expected properties to be an object. Got " + GsonHelper.getType(propertiesElement));
             }
         }
 

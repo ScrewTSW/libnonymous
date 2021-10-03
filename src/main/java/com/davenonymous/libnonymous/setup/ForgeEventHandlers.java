@@ -2,7 +2,7 @@ package com.davenonymous.libnonymous.setup;
 
 import com.davenonymous.libnonymous.command.ModCommands;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 
 public class ForgeEventHandlers {
     @SubscribeEvent

@@ -3,7 +3,7 @@ package com.davenonymous.libnonymous.serialization.nbt;
 import com.davenonymous.libnonymous.serialization.FieldUtils;
 import com.davenonymous.libnonymous.serialization.Store;
 import com.davenonymous.libnonymous.utils.Logz;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 public class NBTFieldUtils {
     private static Map<Class, List<NBTFieldSerializationData>> classNbtCache = new HashMap<>();
 
-    public static CompoundNBT writeFieldsToNBT(List<NBTFieldSerializationData> NBTActions, Object source, CompoundNBT targetCompound, Predicate<NBTFieldSerializationData> test) {
+    public static CompoundTag writeFieldsToNBT(List<NBTFieldSerializationData> NBTActions, Object source, CompoundTag targetCompound, Predicate<NBTFieldSerializationData> test) {
         for(NBTFieldSerializationData data : NBTActions) {
             if(!test.test(data)) {
                 continue;
@@ -33,7 +33,7 @@ public class NBTFieldUtils {
         return targetCompound;
     }
 
-    public static void readFieldsFromNBT(List<NBTFieldSerializationData> NBTActions, Object target, CompoundNBT sourceCompound, Predicate<NBTFieldSerializationData> test) {
+    public static void readFieldsFromNBT(List<NBTFieldSerializationData> NBTActions, Object target, CompoundTag sourceCompound, Predicate<NBTFieldSerializationData> test) {
         for(NBTFieldSerializationData data : NBTActions) {
             if(!test.test(data)) {
                 continue;

@@ -6,16 +6,16 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.command.EnumArgument;
 import net.minecraftforge.server.command.ModIdArgument;
 
-public class CommandOpenConfigGUI implements Command<CommandSource> {
+public class CommandOpenConfigGUI implements Command<CommandSourceStack> {
     private static final CommandOpenConfigGUI CMD = new CommandOpenConfigGUI();
 
-    public static ArgumentBuilder<CommandSource, ?> register(CommandDispatcher<CommandSource> dispatcher) {
+    public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher) {
         return Commands.literal("config")
             .requires(cs -> cs.hasPermission(0))
             .then(
@@ -26,24 +26,24 @@ public class CommandOpenConfigGUI implements Command<CommandSource> {
                     )
                     .executes(context -> {
                         final String modId = context.getArgument("modid", String.class);
-                        ServerPlayerEntity player = context.getSource().getPlayerOrException();
+                        ServerPlayer player = context.getSource().getPlayerOrException();
                         Networking.openConfigGui(player, modId, Mode.BY_SPEC);
                         return 0;
                     })
             )
             .executes(context -> {
-                ServerPlayerEntity player = context.getSource().getPlayerOrException();
+                ServerPlayer player = context.getSource().getPlayerOrException();
                 Networking.openConfigGui(player);
                 return 0;
             });
     }
 
     @Override
-    public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
+    public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         final String modId = context.getArgument("modid", String.class);
         Mode mode = context.getArgument("mode", Mode.class);
 
-        ServerPlayerEntity player = context.getSource().getPlayerOrException();
+        ServerPlayer player = context.getSource().getPlayerOrException();
         Networking.openConfigGui(player, modId, mode);
         return 0;
     }

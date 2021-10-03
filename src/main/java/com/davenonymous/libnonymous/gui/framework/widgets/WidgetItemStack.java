@@ -1,14 +1,14 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
 import com.davenonymous.libnonymous.gui.framework.GUI;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 import java.util.Collections;
 
@@ -27,7 +27,7 @@ public class WidgetItemStack extends WidgetWithValue<ItemStack> {
 
     public void setValue(ItemStack stack) {
         if(!stack.isEmpty()) {
-            ITooltipFlag.TooltipFlags tooltipFlag = Minecraft.getInstance().options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL;
+            TooltipFlag.Default tooltipFlag = Minecraft.getInstance().options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL;
             this.setTooltipLines(stack.getTooltipLines(Minecraft.getInstance().player, tooltipFlag));
         } else {
             this.setTooltipLines(Collections.emptyList());
@@ -37,7 +37,7 @@ public class WidgetItemStack extends WidgetWithValue<ItemStack> {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         super.draw(screen, matrixStack);
 
         if(drawSlot) {
@@ -60,20 +60,20 @@ public class WidgetItemStack extends WidgetWithValue<ItemStack> {
         RenderSystem.scaled(xScale, yScale, 1.0d);
 
         Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.value, 0, 0);
-        RenderHelper.turnOff();
+        Lighting.turnOff();
 
         RenderSystem.popMatrix();
     }
 
     private void drawSlot(Screen screen) {
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1f);
-        screen.getMinecraft().textureManager.bind(GUI.tabIcons);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1f);
+        screen.getMinecraft().textureManager.bindForSetup(GUI.tabIcons);
 
         int texOffsetY = 84;
         int texOffsetX = 84;
 
         GuiUtils.drawTexturedModalRect(-1, -1, texOffsetX, texOffsetY, 18, 18, 0.0f);
 
-        RenderSystem.color4f(1f, 1f, 1f, 1f);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 }

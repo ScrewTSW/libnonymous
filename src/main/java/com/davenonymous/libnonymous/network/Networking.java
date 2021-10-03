@@ -2,12 +2,12 @@ package com.davenonymous.libnonymous.network;
 
 import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.command.CommandOpenConfigGUI;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class Networking {
         INSTANCE.registerMessage(nextID(), PacketReloadConfigs.class, PacketReloadConfigs::toBytes, PacketReloadConfigs::new, PacketReloadConfigs::handle);
     }
 
-    public static void sendClipboardMessage(ServerPlayerEntity to, String clipboard) {
+    public static void sendClipboardMessage(ServerPlayer to, String clipboard) {
         INSTANCE.sendTo(new PacketClipboard(clipboard), to.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
@@ -37,11 +37,11 @@ public class Networking {
         INSTANCE.sendToServer(new PacketEnabledSlots(inventorySlots));
     }
 
-    public static void openConfigGui(ServerPlayerEntity to) {
+    public static void openConfigGui(ServerPlayer to) {
         INSTANCE.sendTo(new PacketOpenConfigGui(true), to.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    public static void openConfigGui(ServerPlayerEntity to, String modId, CommandOpenConfigGUI.Mode mode) {
+    public static void openConfigGui(ServerPlayer to, String modId, CommandOpenConfigGUI.Mode mode) {
         INSTANCE.sendTo(new PacketOpenConfigGui(modId, mode), to.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 

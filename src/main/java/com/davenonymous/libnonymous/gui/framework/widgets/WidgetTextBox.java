@@ -1,9 +1,8 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
-
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import org.lwjgl.opengl.GL11;
 
 public class WidgetTextBox extends Widget {
@@ -36,7 +35,7 @@ public class WidgetTextBox extends Widget {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         if(text == null) {
             return;
         }

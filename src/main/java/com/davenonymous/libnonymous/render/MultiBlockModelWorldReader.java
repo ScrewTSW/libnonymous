@@ -1,44 +1,44 @@
 package com.davenonymous.libnonymous.render;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeManager;
-import net.minecraft.world.biome.BiomeRegistry;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeManager;
+import net.minecraft.data.worldgen.biome.Biomes;
 import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.lighting.WorldLightManager;
+import net.minecraft.world.level.lighting.LevelLightEngine;
 
 import javax.annotation.Nullable;
 
-public class MultiBlockModelWorldReader implements BiomeManager.IBiomeReader, IBlockDisplayReader {
+public class MultiBlockModelWorldReader implements BiomeManager.NoiseBiomeSource, BlockAndTintGetter {
     private MultiblockBlockModel model;
 
-    private IWorldReader blockWorld;
+    private LevelReader blockWorld;
     private BlockPos blockPos;
 
     public MultiBlockModelWorldReader(MultiblockBlockModel model) {
         this.model = model;
     }
 
-    public MultiBlockModelWorldReader(MultiblockBlockModel model, IWorldReader blockWorld, BlockPos blockPos) {
+    public MultiBlockModelWorldReader(MultiblockBlockModel model, LevelReader blockWorld, BlockPos blockPos) {
         this.model = model;
         this.blockWorld = blockWorld;
         this.blockPos = blockPos;
     }
 
     public Biome getBiome(BlockPos pos) {
-        return blockWorld == null ? BiomeRegistry.PLAINS : blockWorld.getBiome(blockPos);
+        return blockWorld == null ? Biomes.PLAINS : blockWorld.getBiome(blockPos);
     }
 
 
-    public IWorldReader getContextWorld() {
+    public LevelReader getContextWorld() {
         return blockWorld;
     }
 
@@ -52,7 +52,7 @@ public class MultiBlockModelWorldReader implements BiomeManager.IBiomeReader, IB
     }
 
     @Override
-    public WorldLightManager getLightEngine() {
+    public LevelLightEngine getLightEngine() {
         // TODO: blockworld might be null, what lightmanager do we use then?
         return blockWorld.getLightEngine();
     }
@@ -63,13 +63,13 @@ public class MultiBlockModelWorldReader implements BiomeManager.IBiomeReader, IB
     }
 
     @Override
-    public int getBrightness(LightType type, BlockPos pos) {
+    public int getBrightness(LightLayer type, BlockPos pos) {
         return blockWorld == null ? type.surrounding : blockWorld.getBrightness(type, blockPos);
     }
 
     @Nullable
     @Override
-    public TileEntity getBlockEntity(BlockPos pos) {
+    public BlockEntity getBlockEntity(BlockPos pos) {
         return null;
     }
 

@@ -1,9 +1,9 @@
 package com.davenonymous.libnonymous.utils;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
 
 /*
 This class is basically taken as is from
@@ -11,7 +11,7 @@ https://github.com/Darkhax-Minecraft/BotanyPots/blob/6aa8b1dbeb/src/main/java/ne
 
 Thanks @Darkhax
  */
-public abstract class RecipeData implements IRecipe<IInventory> {
+public abstract class RecipeData implements Recipe<Container> {
     public RecipeData() {
         if (this.getSerializer() == null) {
             throw new IllegalStateException("No serializer found for " + this.getClass().getName());
@@ -23,13 +23,13 @@ public abstract class RecipeData implements IRecipe<IInventory> {
     }
 
     @Override
-    public boolean matches (IInventory inv, World worldIn) {
+    public boolean matches (Container inv, Level worldIn) {
         // Not used
         return false;
     }
 
     @Override
-    public ItemStack assemble (IInventory inv) {
+    public ItemStack assemble (Container inv) {
         // Not used
         return ItemStack.EMPTY;
     }

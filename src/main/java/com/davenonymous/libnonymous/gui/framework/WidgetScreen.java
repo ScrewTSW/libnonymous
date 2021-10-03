@@ -9,11 +9,11 @@ import com.davenonymous.libnonymous.gui.framework.event.MouseReleasedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseScrollEvent;
 import com.davenonymous.libnonymous.gui.framework.event.UpdateScreenEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
 
 public abstract class WidgetScreen extends Screen {
     protected GUI gui;
@@ -22,7 +22,7 @@ public abstract class WidgetScreen extends Screen {
 
     protected ResourceLocation id;
 
-    protected WidgetScreen(ITextComponent title) {
+    protected WidgetScreen(Component title) {
         super(title);
     }
 
@@ -95,7 +95,7 @@ public abstract class WidgetScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         super.render(matrixStack, mouseX, mouseY, partialTicks);
 
         if(mouseX != previousMouseX || mouseY != previousMouseY) {
@@ -108,11 +108,11 @@ public abstract class WidgetScreen extends Screen {
         getOrCreateGui().drawGUI(this, matrixStack);
         getOrCreateGui().drawTooltips(matrixStack, this, mouseX, mouseY);
         //renderHoveredToolTip(mouseX, mouseY);
-        RenderHelper.turnOff();
+        Lighting.turnOff();
     }
 
     @Override
-    public void renderBackground(MatrixStack matrixStack) {
+    public void renderBackground(PoseStack matrixStack) {
         super.renderBackground(matrixStack);
         // Draw default background?
     }

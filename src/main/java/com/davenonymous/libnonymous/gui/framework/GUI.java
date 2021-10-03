@@ -4,17 +4,17 @@ import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.gui.framework.widgets.IValueProvider;
 import com.davenonymous.libnonymous.gui.framework.widgets.Widget;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class GUI extends WidgetPanel {
         return valueMap.get(id).getValue();
     }
 
-    public void drawGUI(Screen screen, MatrixStack matrixStack) {
+    public void drawGUI(Screen screen, PoseStack matrixStack) {
         this.setX((screen.width - this.width)/2);
         this.setY((screen.height - this.height)/2);
 
@@ -67,16 +67,16 @@ public class GUI extends WidgetPanel {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         drawWindow(screen);
         super.draw(screen, matrixStack);
     }
 
     protected void drawWindow(Screen screen) {
-        RenderHelper.turnOff();
+        Lighting.turnOff();
 
-        RenderSystem.color4f(1f, 1f, 1f, 1f);
-        minecraft.textureManager.bind(tabIcons);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        minecraft.textureManager.bindForSetup(tabIcons);
 
         int texOffsetY = 11;
         int texOffsetX = 64;
@@ -116,13 +116,13 @@ public class GUI extends WidgetPanel {
         GUIHelper.drawStretchedTexture(xOffset+4, 4, width - 8, this.height - 8, texOffsetX + 4, texOffsetY+4, 64, 64);
     }
 
-    public void drawTooltips(MatrixStack matrixStack, Screen screen, int mouseX, int mouseY) {
+    public void drawTooltips(PoseStack matrixStack, Screen screen, int mouseX, int mouseY) {
         Widget hoveredWidget = getHoveredWidget(mouseX, mouseY);
-        FontRenderer font = minecraft.font;
+        Font font = minecraft.font;
 
         if(hoveredWidget != null && hoveredWidget.getTooltip() != null) {
             if(hoveredWidget.getTooltip().size() > 0) {
-                GuiUtils.drawHoveringText(matrixStack, Collections.singletonList(new StringTextComponent(hoveredWidget.getTooltipAsString().toString())), mouseX, mouseY, width, height, 180, font);
+                GuiUtils.drawHoveringText(matrixStack, Collections.singletonList(new TextComponent(hoveredWidget.getTooltipAsString().toString())), mouseX, mouseY, width, height, 180, font);
             }/* else {
                 List<String> tooltips = new ArrayList<>();
                 tooltips.add(hoveredWidget.toString());
@@ -134,9 +134,9 @@ public class GUI extends WidgetPanel {
     public void drawSlot(Screen screen, Slot slot, int guiLeft, int guiTop) {
         //Logz.info("Drawing slot at %dx%d", slot.xPos, slot.yPos);
 
-        RenderHelper.turnOff();
+        Lighting.turnOff();
 
-        RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1f);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1f);
 
         /*
         if(slot instanceof WidgetSlot) {
@@ -146,7 +146,7 @@ public class GUI extends WidgetPanel {
         }
         */
 
-        minecraft.textureManager.bind(tabIcons);
+        minecraft.textureManager.bindForSetup(tabIcons);
 
         float offsetX = guiLeft-1;
         float offsetY = guiTop-1;
@@ -162,7 +162,7 @@ public class GUI extends WidgetPanel {
 
         GuiUtils.drawTexturedModalRect(slot.x, slot.y, texOffsetX, texOffsetY, 18, 18, 0.0f);
 
-        RenderSystem.color4f(1f, 1f, 1f, 1f);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         RenderSystem.popMatrix();
     }

@@ -2,14 +2,14 @@ package com.davenonymous.libnonymous.serialization.packetbuffer;
 
 import com.davenonymous.libnonymous.utils.BlockStateSerializationHelper;
 import com.davenonymous.libnonymous.utils.Logz;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -88,8 +88,8 @@ public class PacketBufferFieldHandlers {
         addIOHandler(UUID.class, buf -> buf.readUUID(), (uuid, buf) -> buf.writeUUID(uuid));
 
         addIOHandler(INBTSerializable.class, buf -> {
-            CompoundNBT store = buf.readNbt();
-            INBT v = store.get("v");
+            CompoundTag store = buf.readNbt();
+            Tag v = store.get("v");
             String className = store.getString("c");
             try {
                 Class clz = Class.forName(className);
@@ -102,7 +102,7 @@ public class PacketBufferFieldHandlers {
 
             return null;
         }, (inbtSerializable, buf) -> {
-            CompoundNBT store = new CompoundNBT();
+            CompoundTag store = new CompoundTag();
             store.putString("c", inbtSerializable.getClass().getName());
             store.put("v", inbtSerializable.serializeNBT());
             buf.writeNbt(store);
@@ -314,10 +314,10 @@ public class PacketBufferFieldHandlers {
 
     // Functional interfaces
     public interface Writer<T extends Object> {
-        void write(T t, PacketBuffer buf);
+        void write(T t, FriendlyByteBuf buf);
     }
 
     public interface Reader<T extends Object> {
-        T read(PacketBuffer buf);
+        T read(FriendlyByteBuf buf);
     }
 }

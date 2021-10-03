@@ -2,10 +2,10 @@ package com.davenonymous.libnonymous.base;
 
 import com.davenonymous.libnonymous.utils.RecipeData;
 import com.davenonymous.libnonymous.utils.RecipeHelper;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
@@ -15,24 +15,24 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BaseRecipeHelper<T extends RecipeData> {
-    IRecipeType<T> recipeType;
+    RecipeType<T> recipeType;
 
-    public BaseRecipeHelper(IRecipeType<T> type) {
+    public BaseRecipeHelper(RecipeType<T> type) {
         this.recipeType = type;
     }
 
     public boolean hasRecipes(RecipeManager manager) {
-        Map<ResourceLocation, IRecipe<?>> recipes = getRecipes(manager);
+        Map<ResourceLocation, Recipe<?>> recipes = getRecipes(manager);
         return recipes != null && recipes.size() > 0;
     }
 
     public int getRecipeCount(RecipeManager manager) {
-        Map<ResourceLocation, IRecipe<?>> recipes = getRecipes(manager);
+        Map<ResourceLocation, Recipe<?>> recipes = getRecipes(manager);
         return recipes != null ? recipes.size() : 0;
     }
 
     public T getRecipe(RecipeManager manager, ResourceLocation id) {
-        Map<ResourceLocation, IRecipe<?>> recipes = getRecipes(manager);
+        Map<ResourceLocation, Recipe<?>> recipes = getRecipes(manager);
         if(recipes == null) {
             return null;
         }
@@ -44,7 +44,7 @@ public class BaseRecipeHelper<T extends RecipeData> {
         return getRecipes(manager).values().stream().map(r -> (T)r);
     }
 
-    public Map<ResourceLocation, IRecipe<?>> getRecipes(RecipeManager manager) {
+    public Map<ResourceLocation, Recipe<?>> getRecipes(RecipeManager manager) {
         return RecipeHelper.getRecipes(manager, recipeType);
     }
 
@@ -53,7 +53,7 @@ public class BaseRecipeHelper<T extends RecipeData> {
     }
 
     public T getRandomRecipe(RecipeManager manager, Random rand) {
-        Map<ResourceLocation, IRecipe<?>> recipes = getRecipes(manager);
+        Map<ResourceLocation, Recipe<?>> recipes = getRecipes(manager);
         if(recipes == null || recipes.size() == 0) {
             return null;
         }

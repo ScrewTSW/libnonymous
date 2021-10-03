@@ -3,8 +3,8 @@ package com.davenonymous.libnonymous.network;
 import com.davenonymous.libnonymous.base.BasePacket;
 import com.davenonymous.libnonymous.command.CommandOpenConfigGUI;
 import com.davenonymous.libnonymous.serialization.Sync;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -32,7 +32,7 @@ public class PacketOpenConfigGui extends BasePacket {
         this.mode = mode;
     }
 
-    public PacketOpenConfigGui(PacketBuffer buf) {
+    public PacketOpenConfigGui(FriendlyByteBuf buf) {
         super(buf);
     }
 

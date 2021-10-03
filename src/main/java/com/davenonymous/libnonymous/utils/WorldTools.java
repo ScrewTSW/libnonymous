@@ -1,6 +1,6 @@
 package com.davenonymous.libnonymous.utils;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.function.Consumer;
 

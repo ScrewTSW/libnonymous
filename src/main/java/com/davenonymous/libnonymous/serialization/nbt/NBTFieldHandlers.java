@@ -2,14 +2,14 @@ package com.davenonymous.libnonymous.serialization.nbt;
 
 import com.davenonymous.libnonymous.utils.BlockStateSerializationHelper;
 import com.davenonymous.libnonymous.utils.Logz;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.ShortNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,7 +28,7 @@ public class NBTFieldHandlers {
 
     static {
         addNBTHandler(boolean[].class, (key, tag) -> {
-            ListNBT listNBT = tag.getList(key, Constants.NBT.TAG_SHORT);
+            ListTag listNBT = tag.getList(key, Constants.NBT.TAG_SHORT);
             boolean[] result = new boolean[listNBT.size()];
             for(int i = 0; i < result.length; i++) {
                 result[i] = listNBT.getShort(i) == 1;
@@ -36,9 +36,9 @@ public class NBTFieldHandlers {
 
             return null;
         }, (key, booleans, tag) -> {
-            ListNBT listNBT = new ListNBT();
+            ListTag listNBT = new ListTag();
             for(boolean b : booleans) {
-                listNBT.add(ShortNBT.valueOf(b ? (short)1 : (short)0));
+                listNBT.add(ShortTag.valueOf(b ? (short)1 : (short)0));
             }
 
             tag.put(key, listNBT);
@@ -68,7 +68,7 @@ public class NBTFieldHandlers {
         addNBTHandler(ItemStack.class, (key, tag) -> ItemStack.of(tag.getCompound(key)), (key, itemStack, tag) -> tag.put(key, itemStack.serializeNBT()));
 
         addNBTHandler(Enum.class, ((key, tag) -> {
-            CompoundNBT enumTag = tag.getCompound(key);
+            CompoundTag enumTag = tag.getCompound(key);
             try {
                 Class clz = Class.forName(enumTag.getString("class"));
                 return Enum.valueOf(clz, enumTag.getString("value"));
@@ -78,7 +78,7 @@ public class NBTFieldHandlers {
             }
             return null;
         }), (key, anEnum, tag) -> {
-            CompoundNBT result = new CompoundNBT();
+            CompoundTag result = new CompoundTag();
             result.putString("class", anEnum.getClass().getName());
             result.putString("value", anEnum.name());
 
@@ -118,10 +118,10 @@ public class NBTFieldHandlers {
         });
 
         addNBTHandler(BlockPos.class, (key, tag) -> {
-            CompoundNBT container = tag.getCompound(key);
+            CompoundTag container = tag.getCompound(key);
             return new BlockPos(container.getInt("x"), container.getInt("y"), container.getInt("z"));
         }, (key, pos, tag) -> {
-            CompoundNBT container = new CompoundNBT();
+            CompoundTag container = new CompoundTag();
             container.putInt("x", pos.getX());
             container.putInt("y", pos.getY());
             container.putInt("z", pos.getZ());
@@ -137,20 +137,20 @@ public class NBTFieldHandlers {
                 return null;
             }
 
-            CompoundNBT containerTag = tag.getCompound(key);
+            CompoundTag containerTag = tag.getCompound(key);
             return containerTag.getUUID("");
         }, (key, uuid, tag) -> {
             if(uuid == null) {
                 return;
             }
 
-            CompoundNBT containerTag = new CompoundNBT();
+            CompoundTag containerTag = new CompoundTag();
             containerTag.putUUID("", uuid);
             tag.put(key, containerTag);
         });
 
         addNBTHandler(INBTSerializable.class, (key, tag) -> {
-            CompoundNBT containerTag = tag.getCompound(key);
+            CompoundTag containerTag = tag.getCompound(key);
             String className = containerTag.getString("class");
             try {
                 Class clz = Class.forName(className);
@@ -171,14 +171,14 @@ public class NBTFieldHandlers {
 
             return null;
         }, (key, INBTSerializable, tag) -> {
-            CompoundNBT containerTag = new CompoundNBT();
+            CompoundTag containerTag = new CompoundTag();
             containerTag.putString("class", INBTSerializable.getClass().getName());
             containerTag.put("data", INBTSerializable.serializeNBT());
             tag.put(key, containerTag);
         });
 
         addNBTHandler(Map.class, (key, tag) -> {
-            CompoundNBT containerTag = tag.getCompound(key);
+            CompoundTag containerTag = tag.getCompound(key);
             if(!containerTag.contains("isEmpty") || containerTag.getBoolean("isEmpty") || !containerTag.contains("entries")) {
                 return new HashMap();
             }
@@ -200,8 +200,8 @@ public class NBTFieldHandlers {
                 NbtReader keyReader = getNBTHandler(keyClass).getLeft();
                 NbtReader valueReader = getNBTHandler(valueClass).getLeft();
 
-                for(INBT baseTag : containerTag.getList("entries", Constants.NBT.TAG_COMPOUND)) {
-                    CompoundNBT entry = (CompoundNBT) baseTag;
+                for(Tag baseTag : containerTag.getList("entries", Constants.NBT.TAG_COMPOUND)) {
+                    CompoundTag entry = (CompoundTag) baseTag;
                     Object keyObject = keyReader.read("key", entry);
                     Object valueObject = valueReader.read("value", entry);
 
@@ -213,7 +213,7 @@ public class NBTFieldHandlers {
 
             return result;
         }, (key, map, tag) -> {
-            CompoundNBT containerTag = new CompoundNBT();
+            CompoundTag containerTag = new CompoundTag();
             containerTag.putBoolean("isEmpty", map.isEmpty());
 
             if(!map.isEmpty()) {
@@ -235,9 +235,9 @@ public class NBTFieldHandlers {
                 NbtWriter keyWriter = getNBTHandler(keyClass).getRight();
                 NbtWriter valueWriter = getNBTHandler(valueClass).getRight();
 
-                ListNBT data = new ListNBT();
+                ListTag data = new ListTag();
                 for(Object e : map.entrySet()) {
-                    CompoundNBT entryTag = new CompoundNBT();
+                    CompoundTag entryTag = new CompoundTag();
                     Map.Entry entry = (Map.Entry) e;
 
                     keyWriter.write("key", entry.getKey(), entryTag);
@@ -254,7 +254,7 @@ public class NBTFieldHandlers {
 
         addNBTHandler(List.class, (key, tag) -> {
             List result = new ArrayList();
-            CompoundNBT containerTag = tag.getCompound(key);
+            CompoundTag containerTag = tag.getCompound(key);
             if(!containerTag.contains("isEmpty") || containerTag.getBoolean("isEmpty") || !containerTag.contains("values")) {
                 return result;
             }
@@ -267,8 +267,8 @@ public class NBTFieldHandlers {
                 }
 
                 NbtReader reader = getNBTHandler(valueClass).getLeft();
-                for(INBT baseTag : containerTag.getList("values", Constants.NBT.TAG_COMPOUND)) {
-                    CompoundNBT entry = (CompoundNBT)baseTag;
+                for(Tag baseTag : containerTag.getList("values", Constants.NBT.TAG_COMPOUND)) {
+                    CompoundTag entry = (CompoundTag)baseTag;
                     Object value = reader.read("data", entry);
                     result.add(value);
                 }
@@ -278,7 +278,7 @@ public class NBTFieldHandlers {
 
             return result;
         }, (key, list, tag) -> {
-            CompoundNBT containerTag = new CompoundNBT();
+            CompoundTag containerTag = new CompoundTag();
             containerTag.putBoolean("isEmpty", list.isEmpty());
 
             if(!list.isEmpty()) {
@@ -291,9 +291,9 @@ public class NBTFieldHandlers {
                 containerTag.putString("valueClass", valueClass.getName());
 
                 NbtWriter writer = getNBTHandler(valueClass).getRight();
-                ListNBT data = new ListNBT();
+                ListTag data = new ListTag();
                 for(Object e : list) {
-                    CompoundNBT entryContainerTag = new CompoundNBT();
+                    CompoundTag entryContainerTag = new CompoundTag();
                     writer.write("data", e, entryContainerTag);
                     data.add(entryContainerTag);
                 }
@@ -304,7 +304,7 @@ public class NBTFieldHandlers {
         });
 
         addNBTHandler(Queue.class, (key, tag) -> {
-            CompoundNBT containerTag = tag.getCompound(key);
+            CompoundTag containerTag = tag.getCompound(key);
             if(!containerTag.contains("isEmpty") || containerTag.getBoolean("isEmpty") || !containerTag.contains("values")) {
                 return new ArrayDeque<>();
             }
@@ -320,8 +320,8 @@ public class NBTFieldHandlers {
 
                 NbtReader reader = getNBTHandler(valueClass).getLeft();
 
-                for(INBT baseTag : containerTag.getList("values", Constants.NBT.TAG_COMPOUND)) {
-                    CompoundNBT entry = (CompoundNBT)baseTag;
+                for(Tag baseTag : containerTag.getList("values", Constants.NBT.TAG_COMPOUND)) {
+                    CompoundTag entry = (CompoundTag)baseTag;
                     Object value = reader.read("data", entry);
                     result.add(value);
                 }
@@ -331,7 +331,7 @@ public class NBTFieldHandlers {
 
             return result;
         }, (key, queue, tag) -> {
-            CompoundNBT containerTag = new CompoundNBT();
+            CompoundTag containerTag = new CompoundTag();
             containerTag.putBoolean("isEmpty", queue.isEmpty());
 
             if(!queue.isEmpty()) {
@@ -345,9 +345,9 @@ public class NBTFieldHandlers {
 
                 NbtWriter writer = getNBTHandler(valueClass).getRight();
 
-                ListNBT data = new ListNBT();
+                ListTag data = new ListTag();
                 for(Object e : queue) {
-                    CompoundNBT entryContainerTag = new CompoundNBT();
+                    CompoundTag entryContainerTag = new CompoundTag();
                     writer.write("data", e, entryContainerTag);
                     data.add(entryContainerTag);
                 }
@@ -403,11 +403,11 @@ public class NBTFieldHandlers {
     }
 
     public interface NbtWriter<T extends Object> {
-        void write(String key, T t, CompoundNBT tag);
+        void write(String key, T t, CompoundTag tag);
     }
 
     public interface NbtReader<T extends Object> {
-        T read(String key, CompoundNBT tag);
+        T read(String key, CompoundTag tag);
     }
 
 }

@@ -3,8 +3,8 @@ package com.davenonymous.libnonymous.network;
 import com.davenonymous.libnonymous.base.BasePacket;
 import com.davenonymous.libnonymous.serialization.Sync;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.function.Supplier;
@@ -18,7 +18,7 @@ public class PacketClipboard extends BasePacket {
         this.clipboardContent = clipboardContent;
     }
 
-    public PacketClipboard(PacketBuffer buf) {
+    public PacketClipboard(FriendlyByteBuf buf) {
         super(buf);
     }
 

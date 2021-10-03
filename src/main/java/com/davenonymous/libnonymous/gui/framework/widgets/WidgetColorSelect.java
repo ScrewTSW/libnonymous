@@ -1,17 +1,16 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
-import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.gui.framework.event.MouseEnterEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseExitEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.gui.GuiUtils;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class WidgetColorSelect extends WidgetWithChoiceValue<Color> {
     public boolean hovered = false;
@@ -29,11 +28,11 @@ public class WidgetColorSelect extends WidgetWithChoiceValue<Color> {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
-        screen.getMinecraft().getTextureManager().bind(BUTTON_TEXTURES);
+    public void draw(Screen screen, PoseStack matrixStack) {
+        screen.getMinecraft().getTextureManager().bindForSetup(BUTTON_TEXTURES);
 
         float[] colors = this.getValue().getRGBColorComponents(null);
-        RenderSystem.color4f(colors[0], colors[1], colors[2], hovered ? 0.7F : 1.0F);
+        RenderSystem.setShaderColor(colors[0], colors[1], colors[2], hovered ? 0.7F : 1.0F);
 
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);

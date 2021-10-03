@@ -2,8 +2,8 @@ package com.davenonymous.libnonymous.setup;
 
 import com.davenonymous.libnonymous.render.RenderEventHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ProxyClient implements IProxy {
@@ -16,12 +16,12 @@ public class ProxyClient implements IProxy {
     }
 
     @Override
-    public World getClientWorld() {
+    public Level getClientWorld() {
         return minecraft.level;
     }
 
     @Override
-    public PlayerEntity getClientPlayer() {
+    public Player getClientPlayer() {
         return minecraft.player;
     }
 }

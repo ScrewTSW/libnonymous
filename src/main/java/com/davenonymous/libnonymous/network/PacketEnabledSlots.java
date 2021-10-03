@@ -3,10 +3,10 @@ package com.davenonymous.libnonymous.network;
 import com.davenonymous.libnonymous.base.BasePacket;
 import com.davenonymous.libnonymous.gui.framework.WidgetSlot;
 import com.davenonymous.libnonymous.serialization.Sync;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -31,13 +31,13 @@ public class PacketEnabledSlots extends BasePacket {
         this.enabledSlots = enabledSlots;
     }
 
-    public PacketEnabledSlots(PacketBuffer buf) {
+    public PacketEnabledSlots(FriendlyByteBuf buf) {
         super(buf);
     }
 
     @Override
     public void doWork(Supplier<NetworkEvent.Context> ctx) {
-        ServerPlayerEntity serverPlayer = ctx.get().getSender();
+        ServerPlayer serverPlayer = ctx.get().getSender();
         int index = 0;
         for(Slot slot : serverPlayer.containerMenu.slots) {
             if(slot instanceof WidgetSlot) {

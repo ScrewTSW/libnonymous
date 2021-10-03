@@ -9,9 +9,9 @@ import com.davenonymous.libnonymous.gui.framework.widgets.WidgetListEntry;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
 import com.davenonymous.libnonymous.utils.FontAwesomeHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.Arrays;
@@ -46,7 +46,7 @@ public abstract class SettingListEntry extends WidgetListEntry {
             comment = "";
         }
 
-        String trimmedComment = Minecraft.getInstance().font.split(new StringTextComponent(comment), availableSpaceForText-13).toString();
+        String trimmedComment = Minecraft.getInstance().font.split(new TextComponent(comment), availableSpaceForText-13).toString();
         if(trimmedComment.length() < comment.length()) {
             trimmedComment += "...";
         }
@@ -62,8 +62,8 @@ public abstract class SettingListEntry extends WidgetListEntry {
         this.add(labelComment);
 
         if(comment.length() > 0) {
-            label.setTooltipLines(new StringTextComponent(comment));
-            labelComment.setTooltipLines(new StringTextComponent(comment));
+            label.setTooltipLines(new TextComponent(comment));
+            labelComment.setTooltipLines(new TextComponent(comment));
         }
 
         this.setSize(columnWidth, 45);
@@ -78,8 +78,8 @@ public abstract class SettingListEntry extends WidgetListEntry {
         restoreDefaultIcon.setColor(ColorHelper.COLOR_DISABLED);
         restoreDefaultIcon.setPosition(optionKeyStringWidth + 5, 2);
         restoreDefaultIcon.setTooltipLines(Arrays.asList(
-                new TranslationTextComponent("libnonymous.config.gui.tooltip.default_is"),
-                new StringTextComponent(defaultValue != null ? defaultValue.toString() : "")
+                new TranslatableComponent("libnonymous.config.gui.tooltip.default_is"),
+                new TextComponent(defaultValue != null ? defaultValue.toString() : "")
         ));
         restoreDefaultIcon.addListener(MouseClickEvent.class, (event, widget) -> {
             value.set(defaultValue);
@@ -108,7 +108,7 @@ public abstract class SettingListEntry extends WidgetListEntry {
     }
 
     protected void showErrorIcon(String message) {
-        errorIcon.setTooltipLines(new StringTextComponent(message));
+        errorIcon.setTooltipLines(new TextComponent(message));
         errorIcon.setVisible(true);
     }
 

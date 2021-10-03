@@ -3,9 +3,9 @@ package com.davenonymous.libnonymous.gui.framework;
 import com.davenonymous.libnonymous.gui.framework.event.VisibilityChangedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.davenonymous.libnonymous.gui.framework.widgets.Widget;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -58,7 +58,7 @@ public class WidgetSlot extends SlotItemHandler {
     }
 
     @Override
-    public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
+    public ItemStack onTake(Player thePlayer, ItemStack stack) {
         if(locked) {
             return stack;
         }
@@ -80,13 +80,13 @@ public class WidgetSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity player) {
+    public boolean mayPickup(Player player) {
         if(locked) {
             return false;
         }
 
         if(player != null) {
-            ItemStack mouseStack = player.inventory.getCarried();
+            ItemStack mouseStack = player.inventoryMenu.getCarried();
             if(mouseStack.isEmpty()) {
                 return true;
             }

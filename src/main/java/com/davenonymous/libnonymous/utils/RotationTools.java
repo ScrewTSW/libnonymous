@@ -1,21 +1,21 @@
 package com.davenonymous.libnonymous.utils;
 
 import com.davenonymous.libnonymous.Libnonymous;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.Camera;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,7 +26,7 @@ public class RotationTools {
     private static ResourceLocation arrowImage;
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderArrowOnGround(Vector3d hitPosition, BlockPos drawPosition, float partialTicks, MatrixStack matrix) {
+    public static void renderArrowOnGround(Vec3 hitPosition, BlockPos drawPosition, float partialTicks, PoseStack matrix) {
         Direction facing = RotationTools.getFacingByTriangle(hitPosition);
 
         RotationTools.TextureRotationList rotList = new RotationTools.TextureRotationList();
@@ -56,7 +56,7 @@ public class RotationTools {
         matrix.pushPose();
 
         // Shift back from camera
-        ActiveRenderInfo renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
         matrix.translate(-renderInfo.getPosition().x(), -renderInfo.getPosition().y(), -renderInfo.getPosition().z());
 
         // Shift to actual block position
@@ -66,9 +66,9 @@ public class RotationTools {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         // Actually draw
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.begin(7, DefaultVertexFormat.POSITION_TEX);
         //IRenderTypeBuffer buffer = IRenderTypeBuffer.getImpl(bufferbuilder);
         //Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(Blocks.DIAMOND_BLOCK.getDefaultState(), matrix, buffer, 15728880,  OverlayTexture.DEFAULT_LIGHT, EmptyModelData.INSTANCE);
 
@@ -80,22 +80,22 @@ public class RotationTools {
         matrix.popPose();
     }
 
-    public static Direction getFacingForPlayer(World world, PlayerEntity player) {
+    public static Direction getFacingForPlayer(Level world, Player player) {
         float blockReachDistance = 6.0F;
 
-        BlockRayTraceResult trace = RaytraceHelper.rayTrace(world, player, blockReachDistance);
+        BlockHitResult trace = RaytraceHelper.rayTrace(world, player, blockReachDistance);
         if(trace == null) {
             return null;
         }
 
-        Vector3d hitPosition = trace.getLocation();
+        Vec3 hitPosition = trace.getLocation();
 
-        hitPosition = hitPosition.subtract(new Vector3d(trace.getBlockPos().getX(), trace.getBlockPos().getY(), trace.getBlockPos().getZ()));
+        hitPosition = hitPosition.subtract(new Vec3(trace.getBlockPos().getX(), trace.getBlockPos().getY(), trace.getBlockPos().getZ()));
         hitPosition = hitPosition.subtract(0.5d, 0.5d, 0.5d);
         return getFacingByTriangle(hitPosition);
     }
 
-    public static Direction getFacingByTriangle(Vector3d vec) {
+    public static Direction getFacingByTriangle(Vec3 vec) {
         if(vec.z > 0) {
             if(vec.x < 0) {
                 // Quadrant 1

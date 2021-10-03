@@ -1,13 +1,13 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
-
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.gui.screens.Screen;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -57,7 +57,7 @@ public class WidgetColorDisplay extends Widget {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         if(isHorizontal()) {
             drawHorizontalGradientRect(0, 0, width, height, colorA, colorB);
         } else {
@@ -94,9 +94,9 @@ public class WidgetColorDisplay extends Widget {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         buffer.vertex(x1, y1, zLevel).color(pR, pG, pB, pA).endVertex();
         buffer.vertex(x1, y2, zLevel).color(pR, pG, pB, pA).endVertex();
         buffer.vertex(x2, y2, zLevel).color(sR, sG, sB, sA).endVertex();
@@ -135,9 +135,9 @@ public class WidgetColorDisplay extends Widget {
         RenderSystem.disableAlphaTest();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder buffer = tessellator.getBuilder();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         buffer.vertex(x2, y1, zLevel).color(pR, pG, pB, pA).endVertex();
         buffer.vertex(x1, y1, zLevel).color(pR, pG, pB, pA).endVertex();
         buffer.vertex(x1, y2, zLevel).color(sR, sG, sB, sA).endVertex();

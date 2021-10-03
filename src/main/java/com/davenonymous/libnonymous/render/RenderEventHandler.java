@@ -2,12 +2,12 @@ package com.davenonymous.libnonymous.render;
 
 import com.davenonymous.libnonymous.base.BaseBlock;
 import com.davenonymous.libnonymous.base.BaseItem;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -25,18 +25,18 @@ public class RenderEventHandler {
             return;
         }
 
-        PlayerEntity player = minecraft.player;
-        ItemStack mainHand = player.getItemInHand(Hand.MAIN_HAND);
-        ItemStack offHand = player.getItemInHand(Hand.OFF_HAND);
+        Player player = minecraft.player;
+        ItemStack mainHand = player.getItemInHand(InteractionHand.MAIN_HAND);
+        ItemStack offHand = player.getItemInHand(InteractionHand.OFF_HAND);
 
         if(!mainHand.isEmpty()) {
             if(mainHand.getItem() instanceof BaseItem) {
                 BaseItem mainBase = (BaseItem)mainHand.getItem();
-                mainBase.renderEffectOnHeldItem(player, Hand.MAIN_HAND, event.getPartialTicks());
+                mainBase.renderEffectOnHeldItem(player, InteractionHand.MAIN_HAND, event.getPartialTicks());
             } else if(mainHand.getItem() instanceof BlockItem) {
                 Block block = ((BlockItem) mainHand.getItem()).getBlock();
                 if(block instanceof BaseBlock) {
-                    ((BaseBlock) block).renderEffectOnHeldItem(player, Hand.MAIN_HAND, event.getPartialTicks(), event.getMatrixStack());
+                    ((BaseBlock) block).renderEffectOnHeldItem(player, InteractionHand.MAIN_HAND, event.getPartialTicks(), event.getMatrixStack());
                 }
             }
         }
@@ -44,11 +44,11 @@ public class RenderEventHandler {
         if(!offHand.isEmpty()) {
             if(offHand.getItem() instanceof BaseItem) {
                 BaseItem mainBase = (BaseItem)offHand.getItem();
-                mainBase.renderEffectOnHeldItem(player, Hand.OFF_HAND, event.getPartialTicks());
+                mainBase.renderEffectOnHeldItem(player, InteractionHand.OFF_HAND, event.getPartialTicks());
             } else if(offHand.getItem() instanceof BlockItem) {
                 Block block = ((BlockItem) offHand.getItem()).getBlock();
                 if(block instanceof BaseBlock) {
-                    ((BaseBlock) block).renderEffectOnHeldItem(player, Hand.OFF_HAND, event.getPartialTicks(), event.getMatrixStack());
+                    ((BaseBlock) block).renderEffectOnHeldItem(player, InteractionHand.OFF_HAND, event.getPartialTicks(), event.getMatrixStack());
                 }
             }
         }

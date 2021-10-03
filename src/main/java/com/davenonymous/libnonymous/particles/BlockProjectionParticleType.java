@@ -2,24 +2,24 @@ package com.davenonymous.libnonymous.particles;
 
 import com.davenonymous.libnonymous.setup.ModObjects;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 
-public class BlockProjectionParticleType extends ParticleType<BlockParticleData> {
+public class BlockProjectionParticleType extends ParticleType<BlockParticleOption> {
     public BlockProjectionParticleType(boolean alwaysShow) {
-        super(alwaysShow, BlockParticleData.DESERIALIZER);
+        super(alwaysShow, BlockParticleOption.DESERIALIZER);
     }
 
-    public static void spawn(ServerWorld world, BlockPos pos, BlockState state) {
-        world.sendParticles(new BlockParticleData(ModObjects.blockProjectionParticleType, state), pos.getX(), pos.getY(), pos.getZ(), 1, 0 ,0, 0, 0 );
+    public static void spawn(ServerLevel world, BlockPos pos, BlockState state) {
+        world.sendParticles(new BlockParticleOption(ModObjects.blockProjectionParticleType, state), pos.getX(), pos.getY(), pos.getZ(), 1, 0 ,0, 0, 0 );
     }
 
     @Override
-    public Codec<BlockParticleData> codec() {
+    public Codec<BlockParticleOption> codec() {
         return ParticleTypes.BLOCK.codec();
     }
 }

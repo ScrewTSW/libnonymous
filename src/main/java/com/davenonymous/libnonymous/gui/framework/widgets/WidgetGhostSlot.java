@@ -4,7 +4,7 @@ import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseReleasedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class WidgetGhostSlot extends WidgetItemStack {
     public WidgetGhostSlot(ItemStack stack) {

@@ -3,20 +3,20 @@ package com.davenonymous.libnonymous.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.PaintingType;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.Potion;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.Motive;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.biome.Biome;
 //import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -78,7 +78,7 @@ public final class MCJsonUtils {
 
         else {
 
-            throw new JsonSyntaxException("Expected " + memberName + " to be a JSON primitive. was " + JSONUtils.getType(json));
+            throw new JsonSyntaxException("Expected " + memberName + " to be a JSON primitive. was " + GsonHelper.getType(json));
         }
     }
 
@@ -97,7 +97,7 @@ public final class MCJsonUtils {
         return getRegistryEntry(json.get(memberName), memberName, ForgeRegistries.ITEMS);
     }
 
-    public static Effect getPotion (JsonObject json, String memberName) {
+    public static MobEffect getPotion (JsonObject json, String memberName) {
 
         return getRegistryEntry(json.get(memberName), memberName, ForgeRegistries.POTIONS);
     }
@@ -127,7 +127,7 @@ public final class MCJsonUtils {
         return getRegistryEntry(json.get(memberName), memberName, ForgeRegistries.ENTITIES);
     }
 
-    public static TileEntityType<?> getTileEntity (JsonObject json, String memberName) {
+    public static BlockEntityType<?> getTileEntity (JsonObject json, String memberName) {
 
         return getRegistryEntry(json.get(memberName), memberName, ForgeRegistries.TILE_ENTITIES);
     }
@@ -137,7 +137,7 @@ public final class MCJsonUtils {
         return getRegistryEntry(json.get(memberName), memberName, ForgeRegistries.PARTICLE_TYPES);
     }
 
-    public static PaintingType getPainting (JsonObject json, String memberName) {
+    public static Motive getPainting (JsonObject json, String memberName) {
 
         return getRegistryEntry(json.get(memberName), memberName, ForgeRegistries.PAINTING_TYPES);
     }

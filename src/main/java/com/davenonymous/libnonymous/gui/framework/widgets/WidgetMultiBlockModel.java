@@ -5,16 +5,16 @@ import com.davenonymous.libnonymous.render.MultiblockBlockModel;
 import com.davenonymous.libnonymous.render.MultiblockBlockModelRenderer;
 import com.davenonymous.libnonymous.render.RenderTickCounter;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import net.minecraft.client.renderer.MultiBufferSource;
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
@@ -27,7 +27,7 @@ public class WidgetMultiBlockModel extends Widget {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         float angle = RenderTickCounter.renderTicks * 45.0f / 128.0f;
 
         RenderSystem.pushMatrix();
@@ -42,7 +42,7 @@ public class WidgetMultiBlockModel extends Widget {
 
         RenderSystem.disableFog();
         RenderSystem.disableLighting();
-        RenderHelper.turnOff();
+        Lighting.turnOff();
 
         RenderSystem.enableBlend();
         RenderSystem.enableCull();
@@ -85,21 +85,21 @@ public class WidgetMultiBlockModel extends Widget {
         );
 
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-        textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
-        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS).setFilter(false, false);
+        textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
+        textureManager.getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
 
         GL11.glFrontFace(GL11.GL_CW);
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder builder = tessellator.getBuilder();
-        IRenderTypeBuffer buffer = IRenderTypeBuffer.immediate(builder);
+        MultiBufferSource buffer = MultiBufferSource.immediate(builder);
 
         // TODO: Do not render with players position
-        MultiblockBlockModelRenderer.renderModel(this.model, new MatrixStack(), buffer, 15728880,  OverlayTexture.NO_OVERLAY, Libnonymous.proxy.getClientWorld(), Libnonymous.proxy.getClientPlayer().blockPosition());
+        MultiblockBlockModelRenderer.renderModel(this.model, new PoseStack(), buffer, 15728880,  OverlayTexture.NO_OVERLAY, Libnonymous.proxy.getClientWorld(), Libnonymous.proxy.getClientPlayer().blockPosition());
 
-        textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
-        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS).restoreLastBlurMipmap();
+        textureManager.bind(TextureAtlas.LOCATION_BLOCKS);
+        textureManager.getTexture(TextureAtlas.LOCATION_BLOCKS).restoreLastBlurMipmap();
 
-        ((IRenderTypeBuffer.Impl) buffer).endBatch();
+        ((MultiBufferSource.BufferSource) buffer).endBatch();
 
         GL11.glFrontFace(GL11.GL_CCW);
 

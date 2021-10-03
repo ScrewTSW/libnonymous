@@ -4,11 +4,11 @@ import com.davenonymous.libnonymous.utils.BlockStateSerializationHelper;
 import com.davenonymous.libnonymous.utils.FloodFill;
 import com.davenonymous.libnonymous.utils.Logz;
 import com.google.gson.JsonObject;
-import net.minecraft.block.BlockState;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class MultiblockBlockModel {
         this.id = id;
     }
 
-    public MultiblockBlockModel(PacketBuffer buffer) {
+    public MultiblockBlockModel(FriendlyByteBuf buffer) {
         // TODO: Be smarter! Send a refmap first, then only references.
         this.id = buffer.readResourceLocation();
         int size = buffer.readInt();
@@ -47,7 +47,7 @@ public class MultiblockBlockModel {
         this.setBlocks(blocks);
     }
 
-    public void writeToBuffer(PacketBuffer buffer) {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(this.id);
         buffer.writeInt(this.blocks.size());
         for(Map.Entry<BlockPos, BlockState> entry : this.blocks.entrySet()) {
@@ -130,7 +130,7 @@ public class MultiblockBlockModel {
 
     }
 
-    public void setBlocksByFloodFill(IWorldReader world, BlockPos pos) {
+    public void setBlocksByFloodFill(LevelReader world, BlockPos pos) {
         FloodFill floodFill = new FloodFill(world, pos);
         Map<BlockPos, BlockState> connectedBlocks = floodFill.getConnectedBlocks();
         if(connectedBlocks.size() == 0) {

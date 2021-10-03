@@ -22,10 +22,10 @@ import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
 import com.davenonymous.libnonymous.utils.Logz;
 import com.electronwill.nightconfig.core.UnmodifiableConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.awt.Color;
@@ -116,13 +116,13 @@ public class WidgetGuiConfig extends WidgetScreen {
     }
 
     public WidgetGuiConfig(Screen parent, List<ForgeConfigSpec> specs) {
-        super(new TranslationTextComponent("libnonymous.config.title"));
+        super(new TranslatableComponent("libnonymous.config.title"));
         this.parent = parent;
         this.specs = specs;
     }
 
     public WidgetGuiConfig(Screen parent, ForgeConfigSpec ... specs) {
-        super(new TranslationTextComponent("libnonymous.config.title"));
+        super(new TranslatableComponent("libnonymous.config.title"));
         this.parent = parent;
         this.specs = Arrays.asList(specs);
     }
@@ -226,7 +226,7 @@ public class WidgetGuiConfig extends WidgetScreen {
 
                 StringListEntry categoryListEntry = new StringListEntry(category, columnWidths-10);
                 if(categoryComment.length() > 0) {
-                    categoryListEntry.setTooltipLines(new StringTextComponent(categoryComment));
+                    categoryListEntry.setTooltipLines(new TextComponent(categoryComment));
                 }
                 categoriesPanel.categoryList.addListEntry(categoryListEntry);
 

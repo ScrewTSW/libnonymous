@@ -1,6 +1,5 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
-
 import com.davenonymous.libnonymous.gui.framework.ISelectable;
 import com.davenonymous.libnonymous.gui.framework.event.ListSelectionEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
@@ -9,12 +8,11 @@ import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 
 import com.davenonymous.libnonymous.utils.Logz;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraftforge.fml.client.gui.GuiUtils;
-
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.math.Matrix4f;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 public class WidgetList extends WidgetPanel {
     public int padding = 2;
@@ -47,7 +45,7 @@ public class WidgetList extends WidgetPanel {
     public Widget getScrollUpButton(int color) {
         WidgetTextBox box = new WidgetTextBox("<") {
             @Override
-            public void draw(Screen screen, MatrixStack matrixStack) {
+            public void draw(Screen screen, PoseStack matrixStack) {
                 if(lineOffset == 0) {
                     return;
                 }
@@ -71,7 +69,7 @@ public class WidgetList extends WidgetPanel {
     public Widget getScrollDownButton(int color) {
         WidgetTextBox box = new WidgetTextBox(">") {
             @Override
-            public void draw(Screen screen, MatrixStack matrixStack) {
+            public void draw(Screen screen, PoseStack matrixStack) {
                 if(lastVisibleLine == getTotalLines()-1) {
                     return;
                 }
@@ -161,7 +159,7 @@ public class WidgetList extends WidgetPanel {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         int backgroundColor = 0xFF333333;
         int borderColor = 0xFF000000;
         int selectedBackgroundColor = 0xFF555555;

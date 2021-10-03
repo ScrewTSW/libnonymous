@@ -1,11 +1,10 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
 import com.davenonymous.libnonymous.gui.framework.SmartNumberFormatter;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraftforge.fml.client.gui.GuiUtils;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 public class WidgetProgressBar extends WidgetWithValue<Double> {
     int borderColor = 0xFF000000;
@@ -85,7 +84,7 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         int x = 0;
         int y = 0;
         int width = this.width;
@@ -101,7 +100,7 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
         GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, x+1, y+1, x+1+progressWidth, y+height-1, foregroundColor, foregroundColor);
 
         if(displayMode != EnumDisplayMode.NOTHING && displayMode != EnumDisplayMode.CUSTOM) {
-            FontRenderer fr = screen.getMinecraft().font;
+            Font fr = screen.getMinecraft().font;
             String content = "";
 
             if(displayMode == EnumDisplayMode.PERCENTAGE) {

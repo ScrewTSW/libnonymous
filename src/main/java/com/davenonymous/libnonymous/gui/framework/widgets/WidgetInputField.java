@@ -6,26 +6,23 @@ import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
 import com.google.common.base.Predicates;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.SharedConstants;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextProperties;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.platform.Lighting;
+import net.minecraft.SharedConstants;
+import net.minecraft.util.Mth;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.TextComponent;
 
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-import static net.minecraft.client.gui.AbstractGui.fill;
+import static net.minecraft.client.gui.GuiComponent.fill;
 
 public class WidgetInputField extends WidgetWithValue<String> {
     private boolean hasShiftKeyDown;
@@ -38,7 +35,7 @@ public class WidgetInputField extends WidgetWithValue<String> {
     private String suggestion;
     private int cursorCounter;
     private Predicate<String> validator = Predicates.alwaysTrue();
-    private final FontRenderer fontRenderer;
+    private final Font fontRenderer;
     private boolean enableBackgroundDrawing = true;
     private boolean canLoseFocus = true;
     private BiFunction<String, Integer, String> textFormatter = (p_195610_0_, p_195610_1_) -> {
@@ -91,7 +88,7 @@ public class WidgetInputField extends WidgetWithValue<String> {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         super.draw(screen, matrixStack);
 
         int renderX = 0;
@@ -106,7 +103,7 @@ public class WidgetInputField extends WidgetWithValue<String> {
             int i = this.enabled ? this.enabledColor : this.disabledColor;
             int j = this.cursorPosition - this.lineScrollOffset;
             int k = this.selectionEnd - this.lineScrollOffset;
-            String s = this.fontRenderer.split(new StringTextComponent(this.value.substring(this.lineScrollOffset)), this.getAdjustedWidth()).toString();
+            String s = this.fontRenderer.split(new TextComponent(this.value.substring(this.lineScrollOffset)), this.getAdjustedWidth()).toString();
             boolean flag = j >= 0 && j <= s.length();
             boolean flag1 = this.isFocused() && this.cursorCounter / 6 % 2 == 0 && flag;
             int l = this.enableBackgroundDrawing ? renderX + 4 : renderX;
@@ -151,7 +148,21 @@ public class WidgetInputField extends WidgetWithValue<String> {
                 this.drawSelectionBox(k1, i1 - 1, l1 - 1, i1 + 1 + 9);
             }
 
-            RenderSystem.enableAlphaTest();
+            //TODO: Write AlphaTesting shader
+            /*
+gigaherz — 10/4/2021 at 12:16 AM
+there's no equivalent
+you need dedicated shaders
+the shaders that do alpha testing literally have a
+if( alpha < X) discard;
+in their code
+so if you want to draw with alpha testing
+you have 2 choices
+either find an existing RenderType whose shader has alphatest, like entityCutout
+or if that won't do for you, write your own shader, and make your own rendertype that uses it
+             */
+            //RenderSystem.enableAlphaTest();
+
             RenderSystem.enableBlend();
         }
     }
@@ -181,13 +192,13 @@ public class WidgetInputField extends WidgetWithValue<String> {
             startX = this.x + this.width;
         }
 
-        Tessellator tessellator = Tessellator.getInstance();
+        Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
-        RenderSystem.color4f(0.0F, 0.0F, 255.0F, 255.0F);
+        RenderSystem.setShaderColor(0.0F, 0.0F, 255.0F, 255.0F);
         RenderSystem.disableTexture();
         RenderSystem.enableColorLogicOp();
         RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
         bufferbuilder.vertex((double)startX, (double)endY, 0.0D).endVertex();
         bufferbuilder.vertex((double)endX, (double)endY, 0.0D).endVertex();
         bufferbuilder.vertex((double)endX, (double)startY, 0.0D).endVertex();
@@ -268,7 +279,7 @@ public class WidgetInputField extends WidgetWithValue<String> {
     }
 
     public void setClampedCursorPosition(int pos) {
-        this.cursorPosition = MathHelper.clamp(pos, 0, this.value.length());
+        this.cursorPosition = Mth.clamp(pos, 0, this.value.length());
     }
 
     private boolean isFocused() {
@@ -503,13 +514,13 @@ public class WidgetInputField extends WidgetWithValue<String> {
             }
 
             if (this.isFocused() && flag && mouseButton == 0) {
-                int i = MathHelper.floor(mouseX) - this.x;
+                int i = Mth.floor(mouseX) - this.x;
                 if (this.enableBackgroundDrawing) {
                     i -= 4;
                 }
 
-                String s = this.fontRenderer.split(new StringTextComponent(this.value.substring(this.lineScrollOffset)), this.getAdjustedWidth()).toString();
-                this.setCursorPosition(this.fontRenderer.split(new StringTextComponent(s), i).toString().length() + this.lineScrollOffset);
+                String s = this.fontRenderer.split(new TextComponent(this.value.substring(this.lineScrollOffset)), this.getAdjustedWidth()).toString();
+                this.setCursorPosition(this.fontRenderer.split(new TextComponent(s), i).toString().length() + this.lineScrollOffset);
                 return true;
             } else {
                 return false;
@@ -532,17 +543,17 @@ public class WidgetInputField extends WidgetWithValue<String> {
      */
     public void setSelectionPos(int position) {
         int i = this.value.length();
-        this.selectionEnd = MathHelper.clamp(position, 0, i);
+        this.selectionEnd = Mth.clamp(position, 0, i);
         if (this.fontRenderer != null) {
             if (this.lineScrollOffset > i) {
                 this.lineScrollOffset = i;
             }
 
             int j = this.getAdjustedWidth();
-            String s = this.fontRenderer.split(new StringTextComponent(this.value.substring(this.lineScrollOffset)), j).toString();
+            String s = this.fontRenderer.split(new TextComponent(this.value.substring(this.lineScrollOffset)), j).toString();
             int k = s.length() + this.lineScrollOffset;
             if (this.selectionEnd == this.lineScrollOffset) {
-                this.lineScrollOffset -= this.fontRenderer.split(new StringTextComponent(this.value), j).toString().length();
+                this.lineScrollOffset -= this.fontRenderer.split(new TextComponent(this.value), j).toString().length();
             }
 
             if (this.selectionEnd > k) {
@@ -551,7 +562,7 @@ public class WidgetInputField extends WidgetWithValue<String> {
                 this.lineScrollOffset -= this.lineScrollOffset - this.selectionEnd;
             }
 
-            this.lineScrollOffset = MathHelper.clamp(this.lineScrollOffset, 0, i);
+            this.lineScrollOffset = Mth.clamp(this.lineScrollOffset, 0, i);
         }
 
     }

@@ -3,9 +3,9 @@ package com.davenonymous.libnonymous.gui.framework.widgets;
 import com.davenonymous.libnonymous.gui.framework.event.*;
 import com.davenonymous.libnonymous.network.Networking;
 import com.google.common.collect.Sets;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -159,7 +159,7 @@ public class WidgetPanel extends Widget {
     }
 
     @Override
-    public void draw(Screen screen, MatrixStack matrixStack) {
+    public void draw(Screen screen, PoseStack matrixStack) {
         for(Widget child : children) {
             if(!child.visible) {
                 continue;

@@ -1,7 +1,7 @@
 package com.davenonymous.libnonymous.gui.framework.util;
 
 import com.davenonymous.libnonymous.Libnonymous;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public enum FontAwesomeIcons {
     BRANDS_AccessibleIcon("accessible-icon", Categories.brands, 14, 16),

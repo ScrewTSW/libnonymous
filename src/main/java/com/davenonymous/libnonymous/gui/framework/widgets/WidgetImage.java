@@ -2,10 +2,10 @@ package com.davenonymous.libnonymous.gui.framework.widgets;
 
 import com.davenonymous.libnonymous.gui.framework.GUIHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceLocation;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class WidgetImage extends Widget {
     ResourceLocation image;
@@ -47,18 +47,18 @@ public class WidgetImage extends Widget {
         RenderSystem.enableAlphaTest();
         RenderSystem.translatef(0.0f, 0.0f, 2.0f);
 
-        screen.getMinecraft().getTextureManager().bind(image);
+        screen.getMinecraft().getTextureManager().bindForSetup(image);
 
         // Draw the image
         if(color == null) {
-            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         } else {
             float[] pColors = color.getRGBColorComponents(null);
             float pA = alpha;
             float pR = pColors[0];
             float pG = pColors[1];
             float pB = pColors[2];
-            RenderSystem.color4f(pR, pG, pB, pA);
+            RenderSystem.setShaderColor(pR, pG, pB, pA);
         }
 
         actuallyDraw();

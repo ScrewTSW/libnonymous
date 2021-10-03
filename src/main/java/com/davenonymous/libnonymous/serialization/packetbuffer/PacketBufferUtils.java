@@ -3,7 +3,7 @@ package com.davenonymous.libnonymous.serialization.packetbuffer;
 import com.davenonymous.libnonymous.serialization.FieldUtils;
 import com.davenonymous.libnonymous.serialization.Sync;
 import com.davenonymous.libnonymous.utils.Logz;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -42,7 +42,7 @@ public class PacketBufferUtils {
         return actionList;
     }
 
-    public static void writeFieldsToByteBuf(List<PacketBufferFieldSerializationData> ioActions, Object source, PacketBuffer targetBuffer, Predicate<PacketBufferFieldSerializationData> test) {
+    public static void writeFieldsToByteBuf(List<PacketBufferFieldSerializationData> ioActions, Object source, FriendlyByteBuf targetBuffer, Predicate<PacketBufferFieldSerializationData> test) {
         for(PacketBufferFieldSerializationData data : ioActions) {
             if(!test.test(data)) {
                 continue;
@@ -57,7 +57,7 @@ public class PacketBufferUtils {
         }
     }
 
-    public static void readFieldsFromByteBuf(List<PacketBufferFieldSerializationData> ioActions, Object target, PacketBuffer sourceBuffer, Predicate<PacketBufferFieldSerializationData> test) {
+    public static void readFieldsFromByteBuf(List<PacketBufferFieldSerializationData> ioActions, Object target, FriendlyByteBuf sourceBuffer, Predicate<PacketBufferFieldSerializationData> test) {
         for(PacketBufferFieldSerializationData data : ioActions) {
             if(!test.test(data)) {
                 continue;

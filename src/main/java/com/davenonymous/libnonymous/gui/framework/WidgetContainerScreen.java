@@ -10,21 +10,21 @@ import com.davenonymous.libnonymous.gui.framework.event.MouseReleasedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.MouseScrollEvent;
 import com.davenonymous.libnonymous.gui.framework.event.UpdateScreenEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.network.chat.Component;
 
-public abstract class WidgetContainerScreen<T extends WidgetContainer> extends ContainerScreen<T> {
+public abstract class WidgetContainerScreen<T extends WidgetContainer> extends AbstractContainerScreen<T> {
     protected GUI gui;
 
     private int previousMouseX = Integer.MAX_VALUE;
     private int previousMouseY = Integer.MAX_VALUE;
     public boolean dataUpdated = false;
 
-    public WidgetContainerScreen(T container, PlayerInventory inv, ITextComponent name) {
+    public WidgetContainerScreen(T container, Inventory inv, Component name) {
         super(container, inv, name);
 
         this.gui = createGUI();
@@ -104,7 +104,7 @@ public abstract class WidgetContainerScreen<T extends WidgetContainer> extends C
     */
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         if(dataUpdated) {
             dataUpdated = false;
             gui.fireEvent(new GuiDataUpdatedEvent());
@@ -121,7 +121,7 @@ public abstract class WidgetContainerScreen<T extends WidgetContainer> extends C
     }
 
     @Override
-    protected void renderLabels(MatrixStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
         super.renderLabels(matrixStack, mouseX, mouseY);
 
         RenderSystem.pushMatrix();
@@ -132,7 +132,7 @@ public abstract class WidgetContainerScreen<T extends WidgetContainer> extends C
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
         this.renderBackground(matrixStack);
         gui.drawGUI(this, matrixStack);
 

@@ -3,7 +3,7 @@ package com.davenonymous.libnonymous.gui.config;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetList;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetPanel;
 import com.davenonymous.libnonymous.gui.framework.widgets.WidgetTextBox;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.language.I18n;
 
 public class CategoriesPanel extends WidgetPanel {
     public WidgetList categoryList;

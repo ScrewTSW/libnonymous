@@ -1,21 +1,16 @@
 package com.davenonymous.libnonymous.gui.framework.widgets;
 
-import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.gui.framework.GUI;
 import com.davenonymous.libnonymous.gui.framework.event.MouseClickEvent;
 import com.davenonymous.libnonymous.gui.framework.event.TabChangedEvent;
 import com.davenonymous.libnonymous.gui.framework.event.WidgetEventResult;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
-
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +20,7 @@ import java.util.Map;
 public class WidgetTabsPanel extends WidgetPanel {
     private List<WidgetPanel> pages = new ArrayList<>();
     private Map<WidgetPanel, ItemStack> pageStacks = new HashMap<>();
-    private Map<WidgetPanel, List<ITextComponent>> pageTooltips = new HashMap<>();
+    private Map<WidgetPanel, List<Component>> pageTooltips = new HashMap<>();
     private TabDockEdge edge = TabDockEdge.WEST;
 
     private WidgetPanel activePanel = null;
@@ -43,7 +38,7 @@ public class WidgetTabsPanel extends WidgetPanel {
         this.addPage(panel, buttonStack, null);
     }
 
-    public void addPage(WidgetPanel panel, ItemStack buttonStack, List<ITextComponent> tooltip) {
+    public void addPage(WidgetPanel panel, ItemStack buttonStack, List<Component> tooltip) {
         panel.setWidth(this.width);
         panel.setHeight(this.height);
 
@@ -149,7 +144,7 @@ public class WidgetTabsPanel extends WidgetPanel {
         }
 
         @Override
-        public void draw(Screen screen, MatrixStack matrixStack) {
+        public void draw(Screen screen, PoseStack matrixStack) {
             RenderSystem.pushMatrix();
 
             screen.getMinecraft().getTextureManager().bind(GUI.tabIcons);
@@ -195,7 +190,7 @@ public class WidgetTabsPanel extends WidgetPanel {
             GuiUtils.drawTexturedModalRect(x, y, textureX, textureY, buttonWidth, buttonHeight, 0.0f);
 
             screen.getMinecraft().getItemRenderer().renderAndDecorateItem(pageStack, iconX, iconY);
-            RenderHelper.turnBackOn();
+            Lighting.turnBackOn();
 
             RenderSystem.popMatrix();
         }

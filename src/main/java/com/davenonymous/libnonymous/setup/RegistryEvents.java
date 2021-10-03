@@ -3,11 +3,11 @@ package com.davenonymous.libnonymous.setup;
 import com.davenonymous.libnonymous.Libnonymous;
 import com.davenonymous.libnonymous.particles.BlockProjectionParticleFactory;
 import com.davenonymous.libnonymous.particles.BlockProjectionParticleType;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -30,7 +30,7 @@ public class RegistryEvents {
     }
 
     @SubscribeEvent
-    public static void onTileEntityRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
+    public static void onTileEntityRegistry(final RegistryEvent.Register<BlockEntityType<?>> event) {
 
     }
 
