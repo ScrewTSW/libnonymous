@@ -53,7 +53,7 @@ public final class MCJsonUtils {
         if (json.isJsonPrimitive()) {
 
             final String rawId = json.getAsString();
-            final ResourceLocation registryId = ResourceLocation.tryCreate(rawId);
+            final ResourceLocation registryId = ResourceLocation.tryParse(rawId);
 
             if (registryId != null) {
 
@@ -78,7 +78,7 @@ public final class MCJsonUtils {
 
         else {
 
-            throw new JsonSyntaxException("Expected " + memberName + " to be a JSON primitive. was " + JSONUtils.toString(json));
+            throw new JsonSyntaxException("Expected " + memberName + " to be a JSON primitive. was " + JSONUtils.getType(json));
         }
     }
 

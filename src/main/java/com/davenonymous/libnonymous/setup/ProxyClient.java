@@ -17,7 +17,7 @@ public class ProxyClient implements IProxy {
 
     @Override
     public World getClientWorld() {
-        return minecraft.world;
+        return minecraft.level;
     }
 
     @Override

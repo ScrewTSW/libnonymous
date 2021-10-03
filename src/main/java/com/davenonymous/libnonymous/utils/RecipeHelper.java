@@ -14,7 +14,7 @@ public class RecipeHelper {
     private static final Field recipesField;
 
     static {
-        recipesField = ObfuscationReflectionHelper.findField(RecipeManager.class, "field_199522_d");
+        recipesField = ObfuscationReflectionHelper.findField(RecipeManager.class, "recipes");
         recipesField.setAccessible(true);
     }
 
@@ -68,7 +68,7 @@ public class RecipeHelper {
             return false;
         }
 
-        recipes.remove(ResourceLocation.tryCreate(recipeId));
+        recipes.remove(ResourceLocation.tryParse(recipeId));
         return true;
     }
 

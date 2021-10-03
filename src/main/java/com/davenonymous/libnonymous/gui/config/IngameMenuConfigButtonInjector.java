@@ -40,11 +40,11 @@ public class IngameMenuConfigButtonInjector {
     private static class ConfigButton extends Button {
 
         public ConfigButton(int x, int y) {
-            super(x, y, 50, 20, new StringTextComponent(I18n.format("libnonymous.config.gui.label.mods")), ConfigButton::onPress);
+            super(x, y, 50, 20, new StringTextComponent(I18n.get("libnonymous.config.gui.label.mods")), ConfigButton::onPress);
         }
 
         public static void onPress(Button button) {
-            PacketOpenConfigGuiHandler.openConfigGuiForAll(minecraft.currentScreen);
+            PacketOpenConfigGuiHandler.openConfigGuiForAll(minecraft.screen);
         }
     }
 }

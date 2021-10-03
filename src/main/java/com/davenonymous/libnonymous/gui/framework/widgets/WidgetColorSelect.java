@@ -30,7 +30,7 @@ public class WidgetColorSelect extends WidgetWithChoiceValue<Color> {
 
     @Override
     public void draw(Screen screen, MatrixStack matrixStack) {
-        screen.getMinecraft().getTextureManager().bindTexture(BUTTON_TEXTURES);
+        screen.getMinecraft().getTextureManager().bind(BUTTON_TEXTURES);
 
         float[] colors = this.getValue().getRGBColorComponents(null);
         RenderSystem.color4f(colors[0], colors[1], colors[2], hovered ? 0.7F : 1.0F);

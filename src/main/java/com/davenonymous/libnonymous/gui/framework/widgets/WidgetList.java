@@ -173,13 +173,13 @@ public class WidgetList extends WidgetPanel {
         int scrollbarWidth = drawScrollbar ? 8 : 0;
 
         int listWidth = width-scrollbarWidth;
-        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, 0, 0, listWidth, height, borderColor, borderColor);
-        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, 1, 1, listWidth-1, height-1, backgroundColor, backgroundColor);
+        GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, 0, 0, listWidth, height, borderColor, borderColor);
+        GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, 1, 1, listWidth-1, height-1, backgroundColor, backgroundColor);
 
         // Draw scrollbars
         if(drawScrollbar) {
             int scrollBarX = listWidth + 1;
-            GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, scrollBarX, 0, listWidth + scrollbarWidth, height, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, scrollBarX, 0, listWidth + scrollbarWidth, height, backgroundColor, backgroundColor);
 
             int linesBefore = lineOffset;
             int linesAfter = getTotalLines() - lastVisibleLine - 1;
@@ -195,7 +195,7 @@ public class WidgetList extends WidgetPanel {
             if(topOffset == 0) {
                 topOffset = 1;
             }
-            GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, scrollBarX+1, topOffset, listWidth + scrollbarWidth -1, topOffset+paddleHeight, scrollColor, scrollColor);
+            GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, scrollBarX+1, topOffset, listWidth + scrollbarWidth -1, topOffset+paddleHeight, scrollColor, scrollColor);
         }
 
         //Logz.info("Rendering lines %d to %d", lineOffset, lastVisibleLine);
@@ -210,7 +210,7 @@ public class WidgetList extends WidgetPanel {
 
             Widget selectedWidget = this.children.get(selected);
 
-            GuiUtils.drawGradientRect(Matrix4f.makeTranslate(0,0,0), 0, 1, yOffset+1, listWidth-1, yOffset+1+selectedWidget.height-1, selectedBackgroundColor, selectedBackgroundColor);
+            GuiUtils.drawGradientRect(Matrix4f.createTranslateMatrix(0,0,0), 0, 1, yOffset+1, listWidth-1, yOffset+1+selectedWidget.height-1, selectedBackgroundColor, selectedBackgroundColor);
         }
 
 

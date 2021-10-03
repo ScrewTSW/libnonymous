@@ -47,7 +47,7 @@ public class WidgetImage extends Widget {
         RenderSystem.enableAlphaTest();
         RenderSystem.translatef(0.0f, 0.0f, 2.0f);
 
-        screen.getMinecraft().getTextureManager().bindTexture(image);
+        screen.getMinecraft().getTextureManager().bind(image);
 
         // Draw the image
         if(color == null) {

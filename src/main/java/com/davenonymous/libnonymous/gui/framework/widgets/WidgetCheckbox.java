@@ -16,7 +16,7 @@ public class WidgetCheckbox extends WidgetSelectButton<Boolean> {
     @Override
     protected void drawButtonContent(MatrixStack matrixStack, Screen screen, FontRenderer fontrenderer) {
         if(this.getValue()) {
-            fontrenderer.drawString(matrixStack,"x", 2.2f, 0.3f, 0xEEEEEE);
+            fontrenderer.draw(matrixStack,"x", 2.2f, 0.3f, 0xEEEEEE);
         }
     }
 }

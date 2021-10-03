@@ -95,13 +95,13 @@ public class WidgetColorDisplay extends Widget {
 
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuilder();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        buffer.pos(x1, y1, zLevel).color(pR, pG, pB, pA).endVertex();
-        buffer.pos(x1, y2, zLevel).color(pR, pG, pB, pA).endVertex();
-        buffer.pos(x2, y2, zLevel).color(sR, sG, sB, sA).endVertex();
-        buffer.pos(x2, y1, zLevel).color(sR, sG, sB, sA).endVertex();
-        tessellator.draw();
+        buffer.vertex(x1, y1, zLevel).color(pR, pG, pB, pA).endVertex();
+        buffer.vertex(x1, y2, zLevel).color(pR, pG, pB, pA).endVertex();
+        buffer.vertex(x2, y2, zLevel).color(sR, sG, sB, sA).endVertex();
+        buffer.vertex(x2, y1, zLevel).color(sR, sG, sB, sA).endVertex();
+        tessellator.end();
         RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.disableBlend();
         RenderSystem.enableAlphaTest();
@@ -136,13 +136,13 @@ public class WidgetColorDisplay extends Widget {
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         RenderSystem.shadeModel(GL11.GL_SMOOTH);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
+        BufferBuilder buffer = tessellator.getBuilder();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        buffer.pos(x2, y1, zLevel).color(pR, pG, pB, pA).endVertex();
-        buffer.pos(x1, y1, zLevel).color(pR, pG, pB, pA).endVertex();
-        buffer.pos(x1, y2, zLevel).color(sR, sG, sB, sA).endVertex();
-        buffer.pos(x2, y2, zLevel).color(sR, sG, sB, sA).endVertex();
-        tessellator.draw();
+        buffer.vertex(x2, y1, zLevel).color(pR, pG, pB, pA).endVertex();
+        buffer.vertex(x1, y1, zLevel).color(pR, pG, pB, pA).endVertex();
+        buffer.vertex(x1, y2, zLevel).color(sR, sG, sB, sA).endVertex();
+        buffer.vertex(x2, y2, zLevel).color(sR, sG, sB, sA).endVertex();
+        tessellator.end();
 
         RenderSystem.shadeModel(GL11.GL_FLAT);
         RenderSystem.disableBlend();

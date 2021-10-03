@@ -47,8 +47,8 @@ public class WidgetPanel extends Widget {
         });
 
         this.addListener(VisibilityChangedEvent.class, (event, widget1) -> {
-            if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.openContainer != null) {
-                Networking.sendEnabledSlotsMessage(Minecraft.getInstance().player.openContainer.inventorySlots);
+            if(Minecraft.getInstance().player != null && Minecraft.getInstance().player.containerMenu != null) {
+                Networking.sendEnabledSlotsMessage(Minecraft.getInstance().player.containerMenu.slots);
             }
             return WidgetEventResult.CONTINUE_PROCESSING;
         });

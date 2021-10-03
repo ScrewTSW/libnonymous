@@ -27,8 +27,8 @@ public class WidgetItemStack extends WidgetWithValue<ItemStack> {
 
     public void setValue(ItemStack stack) {
         if(!stack.isEmpty()) {
-            ITooltipFlag.TooltipFlags tooltipFlag = Minecraft.getInstance().gameSettings.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL;
-            this.setTooltipLines(stack.getTooltip(Minecraft.getInstance().player, tooltipFlag));
+            ITooltipFlag.TooltipFlags tooltipFlag = Minecraft.getInstance().options.advancedItemTooltips ? ITooltipFlag.TooltipFlags.ADVANCED : ITooltipFlag.TooltipFlags.NORMAL;
+            this.setTooltipLines(stack.getTooltipLines(Minecraft.getInstance().player, tooltipFlag));
         } else {
             this.setTooltipLines(Collections.emptyList());
         }
@@ -59,15 +59,15 @@ public class WidgetItemStack extends WidgetWithValue<ItemStack> {
 
         RenderSystem.scaled(xScale, yScale, 1.0d);
 
-        Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.value, 0, 0);
-        RenderHelper.disableStandardItemLighting();
+        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.value, 0, 0);
+        RenderHelper.turnOff();
 
         RenderSystem.popMatrix();
     }
 
     private void drawSlot(Screen screen) {
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1f);
-        screen.getMinecraft().textureManager.bindTexture(GUI.tabIcons);
+        screen.getMinecraft().textureManager.bind(GUI.tabIcons);
 
         int texOffsetY = 84;
         int texOffsetX = 84;

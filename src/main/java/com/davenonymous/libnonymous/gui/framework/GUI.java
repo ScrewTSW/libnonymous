@@ -73,10 +73,10 @@ public class GUI extends WidgetPanel {
     }
 
     protected void drawWindow(Screen screen) {
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
 
         RenderSystem.color4f(1f, 1f, 1f, 1f);
-        minecraft.textureManager.bindTexture(tabIcons);
+        minecraft.textureManager.bind(tabIcons);
 
         int texOffsetY = 11;
         int texOffsetX = 64;
@@ -118,7 +118,7 @@ public class GUI extends WidgetPanel {
 
     public void drawTooltips(MatrixStack matrixStack, Screen screen, int mouseX, int mouseY) {
         Widget hoveredWidget = getHoveredWidget(mouseX, mouseY);
-        FontRenderer font = minecraft.fontRenderer;
+        FontRenderer font = minecraft.font;
 
         if(hoveredWidget != null && hoveredWidget.getTooltip() != null) {
             if(hoveredWidget.getTooltip().size() > 0) {
@@ -134,7 +134,7 @@ public class GUI extends WidgetPanel {
     public void drawSlot(Screen screen, Slot slot, int guiLeft, int guiTop) {
         //Logz.info("Drawing slot at %dx%d", slot.xPos, slot.yPos);
 
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
 
         RenderSystem.color4f(1.0f, 1.0f, 1.0f, 1f);
 
@@ -146,7 +146,7 @@ public class GUI extends WidgetPanel {
         }
         */
 
-        minecraft.textureManager.bindTexture(tabIcons);
+        minecraft.textureManager.bind(tabIcons);
 
         float offsetX = guiLeft-1;
         float offsetY = guiTop-1;
@@ -160,7 +160,7 @@ public class GUI extends WidgetPanel {
 
         // Top Left corner
 
-        GuiUtils.drawTexturedModalRect(slot.xPos, slot.yPos, texOffsetX, texOffsetY, 18, 18, 0.0f);
+        GuiUtils.drawTexturedModalRect(slot.x, slot.y, texOffsetX, texOffsetY, 18, 18, 0.0f);
 
         RenderSystem.color4f(1f, 1f, 1f, 1f);
 

@@ -69,7 +69,7 @@ public class Widget {
     }
 
     public List<String> getTooltipAsString() {
-        return getTooltip().stream().map(t -> t.copyRaw().toString()).collect(Collectors.toList());
+        return getTooltip().stream().map(t -> t.plainCopy().toString()).collect(Collectors.toList());
     }
 
     public List<ITextComponent> getTooltip() {
@@ -116,14 +116,14 @@ public class Widget {
     public static int computeGuiScale(Minecraft mc) {
         int scaleFactor = 1;
 
-        int k = mc.gameSettings.guiScale;
+        int k = mc.options.guiScale;
 
         if (k == 0) {
             k = 1000;
         }
 
 
-        while (scaleFactor < k && mc.getMainWindow().getWidth() / (scaleFactor + 1) >= 320 && mc.getMainWindow().getHeight() / (scaleFactor + 1) >= 240) {
+        while (scaleFactor < k && mc.getWindow().getScreenWidth() / (scaleFactor + 1) >= 320 && mc.getWindow().getScreenHeight() / (scaleFactor + 1) >= 240) {
             ++scaleFactor;
         }
         return scaleFactor;

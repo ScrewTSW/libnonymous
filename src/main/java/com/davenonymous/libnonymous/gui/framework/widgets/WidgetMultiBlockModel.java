@@ -42,13 +42,13 @@ public class WidgetMultiBlockModel extends Widget {
 
         RenderSystem.disableFog();
         RenderSystem.disableLighting();
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
 
         RenderSystem.enableBlend();
         RenderSystem.enableCull();
         RenderSystem.enableAlphaTest();
 
-        if (Minecraft.isAmbientOcclusionEnabled()) {
+        if (Minecraft.useAmbientOcclusion()) {
             RenderSystem.shadeModel(GL11.GL_SMOOTH);
         } else {
             RenderSystem.shadeModel(GL11.GL_FLAT);
@@ -85,21 +85,21 @@ public class WidgetMultiBlockModel extends Widget {
         );
 
         TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-        textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).setBlurMipmapDirect(false, false);
+        textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
+        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS).setFilter(false, false);
 
         GL11.glFrontFace(GL11.GL_CW);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder builder = tessellator.getBuffer();
-        IRenderTypeBuffer buffer = IRenderTypeBuffer.getImpl(builder);
+        BufferBuilder builder = tessellator.getBuilder();
+        IRenderTypeBuffer buffer = IRenderTypeBuffer.immediate(builder);
 
         // TODO: Do not render with players position
-        MultiblockBlockModelRenderer.renderModel(this.model, new MatrixStack(), buffer, 15728880,  OverlayTexture.NO_OVERLAY, Libnonymous.proxy.getClientWorld(), Libnonymous.proxy.getClientPlayer().getPosition());
+        MultiblockBlockModelRenderer.renderModel(this.model, new MatrixStack(), buffer, 15728880,  OverlayTexture.NO_OVERLAY, Libnonymous.proxy.getClientWorld(), Libnonymous.proxy.getClientPlayer().blockPosition());
 
-        textureManager.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+        textureManager.bind(AtlasTexture.LOCATION_BLOCKS);
+        textureManager.getTexture(AtlasTexture.LOCATION_BLOCKS).restoreLastBlurMipmap();
 
-        ((IRenderTypeBuffer.Impl) buffer).finish();
+        ((IRenderTypeBuffer.Impl) buffer).endBatch();
 
         GL11.glFrontFace(GL11.GL_CCW);
 

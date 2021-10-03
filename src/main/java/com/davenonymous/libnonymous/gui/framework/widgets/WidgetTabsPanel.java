@@ -152,7 +152,7 @@ public class WidgetTabsPanel extends WidgetPanel {
         public void draw(Screen screen, MatrixStack matrixStack) {
             RenderSystem.pushMatrix();
 
-            screen.getMinecraft().getTextureManager().bindTexture(GUI.tabIcons);
+            screen.getMinecraft().getTextureManager().bind(GUI.tabIcons);
 
             RenderSystem.disableLighting();
             RenderSystem.color3f(1F, 1F, 1F); //Forge: Reset color in case Items change it.
@@ -194,8 +194,8 @@ public class WidgetTabsPanel extends WidgetPanel {
 
             GuiUtils.drawTexturedModalRect(x, y, textureX, textureY, buttonWidth, buttonHeight, 0.0f);
 
-            screen.getMinecraft().getItemRenderer().renderItemAndEffectIntoGUI(pageStack, iconX, iconY);
-            RenderHelper.enableStandardItemLighting();
+            screen.getMinecraft().getItemRenderer().renderAndDecorateItem(pageStack, iconX, iconY);
+            RenderHelper.turnBackOn();
 
             RenderSystem.popMatrix();
         }

@@ -49,14 +49,14 @@ public class WidgetTextBox extends Widget {
 
         RenderSystem.enableBlend();
 
-        int bottomOffset = (int)(((double)(screen.getMinecraft().getMainWindow().getHeight()/scale) - (getActualY() + height)) * scale);
+        int bottomOffset = (int)(((double)(screen.getMinecraft().getWindow().getScreenHeight()/scale) - (getActualY() + height)) * scale);
         int heightTmp = (height*scale)-1;
         if(heightTmp < 0) {
             heightTmp = 0;
         }
         GL11.glScissor(getActualX() * scale, bottomOffset+2, width*scale, heightTmp);
 
-        screen.getMinecraft().fontRenderer.drawString(matrixStack, text, 0, 0, textColor);
+        screen.getMinecraft().font.draw(matrixStack, text, 0, 0, textColor);
 
         RenderSystem.disableBlend();
 

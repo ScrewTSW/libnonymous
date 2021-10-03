@@ -145,25 +145,25 @@ public class WidgetGuiConfig extends WidgetScreen {
     }
 
     @Override
-    public void onClose() {
+    public void removed() {
         if(this.parent != null) {
-            super.onClose();
-            Minecraft.getInstance().displayGuiScreen(this.parent);
+            super.removed();
+            Minecraft.getInstance().setScreen(this.parent);
         } else {
-            super.onClose();
+            super.removed();
         }
     }
 
     @Override
     protected GUI createGUI() {
         // Best resolution guessing begins:
-        int desiredHeight = (int) (Minecraft.getInstance().getMainWindow().getHeight() / Minecraft.getInstance().getMainWindow().getGuiScaleFactor());
-        int desiredWidth = (int) (Minecraft.getInstance().getMainWindow().getWidth() / Minecraft.getInstance().getMainWindow().getGuiScaleFactor());
+        int desiredHeight = (int) (Minecraft.getInstance().getWindow().getScreenHeight() / Minecraft.getInstance().getWindow().getGuiScale());
+        int desiredWidth = (int) (Minecraft.getInstance().getWindow().getScreenWidth() / Minecraft.getInstance().getWindow().getGuiScale());
         GUI gui = new GUI(0, 0, desiredWidth, desiredHeight);
 
         int columnWidths = (desiredWidth - 20) / 3;
 
-        WidgetTextBox labelSpecs = new WidgetTextBox(I18n.format("libnonymous.config.gui.label.config"), 0xC0000000);
+        WidgetTextBox labelSpecs = new WidgetTextBox(I18n.get("libnonymous.config.gui.label.config"), 0xC0000000);
         labelSpecs.setDimensions(6, 6, columnWidths, 9);
         gui.add(labelSpecs);
 
@@ -179,7 +179,7 @@ public class WidgetGuiConfig extends WidgetScreen {
             return WidgetEventResult.CONTINUE_PROCESSING;
         });
         closeButton.addListener(MouseClickEvent.class, (event, widget) -> {
-            this.onClose();
+            this.removed();
             return WidgetEventResult.HANDLED;
         });
         gui.add(closeButton);

@@ -38,7 +38,7 @@ public class WidgetSelectButton<T> extends WidgetWithChoiceValue<T> {
         this.addListener(MouseEnterEvent.class, (event, widget) -> {((WidgetSelectButton)widget).hovered = true; return WidgetEventResult.CONTINUE_PROCESSING; });
         this.addListener(MouseExitEvent.class, (event, widget) -> {((WidgetSelectButton)widget).hovered = false; return WidgetEventResult.CONTINUE_PROCESSING; });
         this.addListener(MouseClickEvent.class, ((event, widget) -> {
-            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(this.clickSound, 1.0F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(this.clickSound, 1.0F));
             return WidgetEventResult.CONTINUE_PROCESSING;
         }));
 
@@ -77,18 +77,18 @@ public class WidgetSelectButton<T> extends WidgetWithChoiceValue<T> {
 
 
         if(atlasSprite != null) {
-            screen.getMinecraft().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+            screen.getMinecraft().getTextureManager().bind(AtlasTexture.LOCATION_BLOCKS);
 
             //screen.drawTexturedModalRect(0, 0, atlasSprite, 16, 16);
             WidgetButton.fillAreaWithIcon(atlasSprite, 0, 0, width, height);
             //Gui.drawModalRectWithCustomSizedTexture(0, 0, atlasSprite.getMinU(), atlasSprite.getMinV(), width, height, atlasSprite.getMaxU()-atlasSprite.getMinU(), atlasSprite.getMaxV()-atlasSprite.getMinU());
         } else {
-            screen.getMinecraft().getTextureManager().bindTexture(backgroundTexture);
+            screen.getMinecraft().getTextureManager().bind(backgroundTexture);
             GUIHelper.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, width, height, 16.0f, 16.0f);
         }
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, hovered ? 1.0F : 1.0F);
-        screen.getMinecraft().getTextureManager().bindTexture(GUI.tabIcons);
+        screen.getMinecraft().getTextureManager().bind(GUI.tabIcons);
 
         // Top Left corner
         int texOffsetX = 64;
@@ -120,7 +120,7 @@ public class WidgetSelectButton<T> extends WidgetWithChoiceValue<T> {
         // Right edge
         GUIHelper.drawStretchedTexture(0+width - 4, 4, 4, this.height - 8, texOffsetX + overlayWidth - 4, texOffsetY + 3, 4, 12);
 
-        FontRenderer fontrenderer = screen.getMinecraft().fontRenderer;
+        FontRenderer fontrenderer = screen.getMinecraft().font;
         RenderSystem.translatef(0.0f, 0.0f, 10.0f);
         drawButtonContent(matrixStack, screen, fontrenderer);
         RenderSystem.translatef(0.0f, 0.0f, -10.0f);

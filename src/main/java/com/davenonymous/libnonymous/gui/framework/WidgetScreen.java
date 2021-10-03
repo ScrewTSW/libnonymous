@@ -108,7 +108,7 @@ public abstract class WidgetScreen extends Screen {
         getOrCreateGui().drawGUI(this, matrixStack);
         getOrCreateGui().drawTooltips(matrixStack, this, mouseX, mouseY);
         //renderHoveredToolTip(mouseX, mouseY);
-        RenderHelper.disableStandardItemLighting();
+        RenderHelper.turnOff();
     }
 
     @Override

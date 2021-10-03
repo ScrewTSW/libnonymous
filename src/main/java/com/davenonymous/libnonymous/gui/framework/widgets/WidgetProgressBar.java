@@ -91,17 +91,17 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
         int width = this.width;
         int height = this.height;
 
-        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, x, y, x+width, y+height, borderColor, borderColor);
-        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, x+1, y+1, x+width-1, y+height-1, backgroundColor, backgroundColor );
+        GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, x, y, x+width, y+height, borderColor, borderColor);
+        GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, x+1, y+1, x+width-1, y+height-1, backgroundColor, backgroundColor );
 
         double progress = (getValue() - getRangeMin()) / (getRangeMax() - getRangeMin());
         progress = Math.min(Math.max(progress, 0.0d), 1.0d);
         int progressWidth = (int) ((Math.ceil((double)width-2) * progress));
 
-        GuiUtils.drawGradientRect(matrixStack.getLast().getMatrix(), 0, x+1, y+1, x+1+progressWidth, y+height-1, foregroundColor, foregroundColor);
+        GuiUtils.drawGradientRect(matrixStack.last().pose(), 0, x+1, y+1, x+1+progressWidth, y+height-1, foregroundColor, foregroundColor);
 
         if(displayMode != EnumDisplayMode.NOTHING && displayMode != EnumDisplayMode.CUSTOM) {
-            FontRenderer fr = screen.getMinecraft().fontRenderer;
+            FontRenderer fr = screen.getMinecraft().font;
             String content = "";
 
             if(displayMode == EnumDisplayMode.PERCENTAGE) {
@@ -112,8 +112,8 @@ public class WidgetProgressBar extends WidgetWithValue<Double> {
                 content = String.format("%.1f%% (%s)", progress*100, SmartNumberFormatter.formatNumber(this.getValue()));
             }
 
-            int xPos = x + 1 + (width - fr.getStringWidth(content)) / 2;
-            fr.drawString(matrixStack, content, xPos, y+2, textColor);
+            int xPos = x + 1 + (width - fr.width(content)) / 2;
+            fr.draw(matrixStack, content, xPos, y+2, textColor);
         }
 
     }

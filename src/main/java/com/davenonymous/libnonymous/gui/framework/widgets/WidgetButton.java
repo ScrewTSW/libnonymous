@@ -39,7 +39,7 @@ public class WidgetButton extends Widget {
         this.backgroundTexture = GUI.defaultButtonTexture;
 
         this.addListener(MouseClickEvent.class, ((event, widget) -> {
-            Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            Minecraft.getInstance().getSoundManager().play(SimpleSound.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return WidgetEventResult.CONTINUE_PROCESSING;
         }));
 
@@ -75,18 +75,18 @@ public class WidgetButton extends Widget {
 
 
         if(atlasSprite != null) {
-            screen.getMinecraft().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+            screen.getMinecraft().getTextureManager().bind(AtlasTexture.LOCATION_BLOCKS);
 
             //screen.drawTexturedModalRect(0, 0, atlasSprite, 16, 16);
             fillAreaWithIcon(atlasSprite, 0, 0, width, height);
             //Gui.drawModalRectWithCustomSizedTexture(0, 0, atlasSprite.getMinU(), atlasSprite.getMinV(), width, height, atlasSprite.getMaxU()-atlasSprite.getMinU(), atlasSprite.getMaxV()-atlasSprite.getMinU());
         } else {
-            screen.getMinecraft().getTextureManager().bindTexture(backgroundTexture);
+            screen.getMinecraft().getTextureManager().bind(backgroundTexture);
             GUIHelper.drawModalRectWithCustomSizedTexture(0, 0, 0, 0, width, height, 16.0f, 16.0f);
         }
 
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, hovered ? 1.0F : 1.0F);
-        screen.getMinecraft().getTextureManager().bindTexture(GUI.tabIcons);
+        screen.getMinecraft().getTextureManager().bind(GUI.tabIcons);
 
         // Top Left corner
         int texOffsetX = 64;
@@ -118,7 +118,7 @@ public class WidgetButton extends Widget {
         // Right edge
         GUIHelper.drawStretchedTexture(0+width - 4, 4, 4, this.height - 8, texOffsetX + overlayWidth - 4, texOffsetY + 3, 4, 12);
 
-        FontRenderer fontrenderer = screen.getMinecraft().fontRenderer;
+        FontRenderer fontrenderer = screen.getMinecraft().font;
         RenderSystem.translatef(0.0f, 0.0f, 10.0f);
         drawButtonContent(matrixStack, screen, fontrenderer);
         RenderSystem.translatef(0.0f, 0.0f, -10.0f);
@@ -152,7 +152,7 @@ public class WidgetButton extends Widget {
      */
     public static void fillAreaWithIcon(TextureAtlasSprite icon, int x, int y, int width, int height) {
         Tessellator t = Tessellator.getInstance();
-        BufferBuilder b = t.getBuffer();
+        BufferBuilder b = t.getBuilder();
         b.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         float zLevel = 0.0f;
@@ -164,10 +164,10 @@ public class WidgetButton extends Widget {
         int fullCols = width / iconWidth;
         int fullRows = height / iconHeight;
 
-        float minU = icon.getMinU();
-        float maxU = icon.getMaxU();
-        float minV = icon.getMinV();
-        float maxV = icon.getMaxV();
+        float minU = icon.getU0();
+        float maxU = icon.getU1();
+        float minV = icon.getV0();
+        float maxV = icon.getV1();
 
         int excessWidth = width % iconWidth;
         int excessHeight = height % iconHeight;
@@ -206,15 +206,15 @@ public class WidgetButton extends Widget {
             }
         }
 
-        t.draw();
+        t.end();
     }
 
     private static void drawRect(float x, float y, float width, float height, float z, float u, float v, float maxU, float maxV) {
-        BufferBuilder b = Tessellator.getInstance().getBuffer();
+        BufferBuilder b = Tessellator.getInstance().getBuilder();
 
-        b.pos(x, y + height, z).tex(u, maxV).endVertex();
-        b.pos(x + width, y + height, z).tex(maxU, maxV).endVertex();
-        b.pos(x + width, y, z).tex(maxU, v).endVertex();
-        b.pos(x, y, z).tex(u, v).endVertex();
+        b.vertex(x, y + height, z).uv(u, maxV).endVertex();
+        b.vertex(x + width, y + height, z).uv(maxU, maxV).endVertex();
+        b.vertex(x + width, y, z).uv(maxU, v).endVertex();
+        b.vertex(x, y, z).uv(u, v).endVertex();
     }
 }
